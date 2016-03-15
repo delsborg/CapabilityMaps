@@ -63,11 +63,11 @@ var Capability = function(term, cutoff, numpeople) {
  * An individual person and their information.
  */
 var Person = function(info) {
-    this.id = info["md_1"];
+    this.id = info["_id"];
     this.info = info;
-    this.info["md_Z"] = this.info["md_Z"].replace(/^.*\|/g, ""); // stop things like "PROFTAYLOR|PROF"
-    this.info["md_A"] = this.info["md_A"].replace(/<\/?strong>/g, "");
-    this.info["md_B"] = this.info["md_B"].replace(/<\/?strong>/g, "");
+//DRE    this.info["md_Z"] = this.info["md_Z"].replace(/^.*\|/g, ""); // stop things like "PROFTAYLOR|PROF"
+//DRE    this.info["md_A"] = this.info["md_A"].replace(/<\/?strong>/g, "");
+//DRE    this.info["md_B"] = this.info["md_B"].replace(/<\/?strong>/g, "");
     this.fullInfo = {};
 }
 Person.prototype.fullname = function() {
@@ -125,7 +125,7 @@ Graph.prototype.addGroup = function(g) {
     this.groups.push(g);
 }
 Graph.prototype.createPerson = function(info) {
-    if (info["md_1"] in this.people) return this.people[info["md_1"]];
+    if (info["_id"] in this.people) return this.people[info["_id"]];
     var p = new Person(info);
     this.people[p.id] = p;
     return p;
@@ -405,15 +405,18 @@ DetailsPanel.prototype.showDetails = function(mode, id) {
             ).append(
                 g.groups.reduce(function(div, group, i) {
                     if (group.capabilities.map(function(c) { return c.term; }).indexOf(id) != -1) {
+
+
                         $.each(group.people, function(key, person) {
-                            person.info["md_4"].split("|").forEach(function(i) {
-                                if (!departments[i]) {
-                                    departments[i] = 0;
-                                    deptNames.push(i);
-                                }
-                                departments[i]++;
-                            });
+                           $.each(person.info._source.organization, function(k,i) {
+                               if (!departments[i.name]) {
+                    	        departments[i.name] = 0;
+                                    deptNames.push(i.name);
+	                       }
+	                     departments[i.name]++;
+                           });
                         });
+
                         return div.append(that.groupInfo(i, group, mode, id));
                     } else return div;
                 }, $("<div/>"))
@@ -426,13 +429,13 @@ DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
     var departments = {};
     var deptNames = [];
     $.each(group.people, function(key, person) {
-        person.info["md_4"].split("|").forEach(function(i) {
-            if (!departments[i]) {
-                departments[i] = 0;
-                deptNames.push(i);
-            }
-            departments[i]++;
-        });
+       $.each(person.info._source.organization, function(k,i) {
+           if (!departments[i.name]) {
+	        departments[i.name] = 0;
+                deptNames.push(i.name);
+	   }
+	 departments[i.name]++;
+       });
     });
     return $("<div/>")
         .append(
@@ -458,15 +461,15 @@ DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
                 return div
                     .append($("<div>")
                         .addClass("person_details")
-                        .append(!p.info["md_3"] ? $("<span/>") : ($("<img/>")
-                            .attr("src", "http://findanexpert.unimelb.edu.au" + p.info["md_3"])
+                        .append(!p.info._source.name ? $("<span/>") : ($("<img/>")
+                            .attr("src", p.info._source.thumbnail)
                             .attr("width", 50)
                             .css({"float" : "right", "margin-top" : "10px", "clear" : "both"}))
                         )
                         .append($("<h3/>")
                             .css({"clear" : "none"})
-                            .append($("<a>" + p.fullname() + "</a>")
-                                .attr("href", "http://search-au.funnelback.com/s/search.html?query=" + encodeURI(p.queryText(group.capabilities)) + "&collection=unimelb-researchers&referrer=www.findanexpert.unimelb.edu.au")
+                            .append($("<a>" + p.info._source.name + "</a>")
+                                .attr("href", p.info._source.uri)
                                 .attr("target", "_blank")
                             )
                             .append($("<span> </span>"))
@@ -481,7 +484,7 @@ DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
                                 }(i))
                             )
                         )
-                        .append($("<p>" + p.info["md_4"].replace(/\|/g, " / ") + "</p>").css("font-style", "italic"))
+                 //       .append($("<p>" + p.info["md_4"].replace(/\|/g, " / ") + "</p>").css("font-style", "italic"))
                         .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_8"], "grants"))
                         .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_U"], "publications"))
 
@@ -513,7 +516,7 @@ DetailsPanel.makeslidedown = function(q, l, name) {
                 .append(l.length > 5 
                     ? $("<li/>").append(
                         $("<a>(view more)</a>")
-                        .attr("href", "http://search-au.funnelback.com/s/search.html?query=" + encodeURI(q) + "&collection=unimelb-researchers&referrer=www.findanexpert.unimelb.edu.au")
+//                        .attr("href", "http://search-au.funnelback.com/s/search.html?query=" + encodeURI(q) + "&collection=unimelb-researchers&referrer=www.findanexpert.unimelb.edu.au")
                         .attr("target", "_blank")
                     )
                     : ""
@@ -548,7 +551,8 @@ var loadCapability = function() {
     else {
         disableSubButton(); 
         var query = queryQueue.pop();
-        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
+//        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
+        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:Trade&callback=ipretResults"
         var request = new JSONscriptRequest(jsonurl);
         request.buildScriptTag();
         request.addScriptTag();
@@ -562,15 +566,16 @@ var addKwd = function(kwd) {
     loadCapability();
 }
 var ipretResults = function(results) {
-    var resultlist = results["results"];
-    if (!resultlist.length || resultlist[0]["md_1"] === undefined) enableSubButton();
+    var resultlist = results.hits["hits"];
+    if (!resultlist.length || resultlist[0]["_id"] === undefined) enableSubButton();
     else {
-        var term = resultlist[0]["query"];
+ //DRE       var term = resultlist[0]["query"];
+        var term = "Trade";
         if (!g.hasCapability(term)) {
             var c = new Capability(term, queryCutoffElem.value, resultlist.length);
             var people = [];
             for (var i = 0; i < Math.min(queryCutoffElem.value, resultlist.length); i++) {
-                if (resultlist[i]["md_1"] == undefined) continue;
+                if (resultlist[i]["_id"] == undefined) continue;
                 var person = g.createPerson(resultlist[i]);
                 people.push(person);
                 updatedPeople.push(person.id);
@@ -918,6 +923,7 @@ var finish = function() {
     showPanel("demo");
     enableSubButton();
     fullResultsQueue = [];
+    /*
     $.each(g.groups, function(key, group) {
         $.each(group.people, function(key, person) {
             if (updatedPeople.indexOf(person.id) != -1)
@@ -927,6 +933,7 @@ var finish = function() {
     updatedPeople = [];
     progressBar.reset(fullResultsQueue.length, 2);
     retrieveFullResults();
+    */
 }
 
 var retrieveFullResults = function() {

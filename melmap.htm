@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <title>Find an Expert Capability Map</title>
+
+        <link rel="stylesheet" href="http://brand.unimelb.edu.au/web-templates/1-1/css/complete.css">
+        <link rel="stylesheet" href="http://www.findanexpert.unimelb.edu.au/css/vitro.css">
+        <link rel="stylesheet" href="http://www.findanexpert.unimelb.edu.au/css/menupage/menupage.css">
+        <link rel="stylesheet" href="http://www.findanexpert.unimelb.edu.au/css/edit.css">
+        <link rel="stylesheet" href="http://findanexpert.unimelb.edu.au/themes/unimelb/css/screen.css">
+        <link rel="stylesheet" href="http://www.findanexpert.unimelb.edu.au/themes/unimelb/css/custom2.css">
+        <link rel="stylesheet" type="text/css" href="http://brand.unimelb.edu.au/global-header/css/style.css">
+        <link  rel="stylesheet" type="text/css" href="graph.css">
+        <link rel="shortcut icon" type="image/x-icon" href="http://www.findanexpert.unimelb.edu.au/favicon.ico">
+
+        <script type="text/javascript" src="http://www.findanexpert.unimelb.edu.au/js/jquery.js"></script>
+        <script type="text/javascript" src="jquery.color.js"></script>
+        <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+        <script language="javascript" type="text/javascript" src="jsr_class.js"></script>
+        <script language="javascript" type="text/javascript" src="graph_new.js"></script>
+    </head>
+    
+    <body class="no-logo fae" style="padding-top:60px">
+        <div id="g-header" role="banner">       <div class="wrapper" style="max-width: 980px; width: auto;">         <ul class="skiplinks">           <li><a href="#g-global-menu">Skip to navigation</a></li>           <li><a href="#main-content">Skip to content</a></li>         </ul>         <ol id="g-breadcrumb-menu">           <li id="g-breadcrumb-home"><a href="http://www.unimelb.edu.au/">University Home</a></li>         </ol>         <div id="g-global-search">           <a href="http://search.unimelb.edu.au/" id="g-search-button" role="button" aria-haspopup="true">Search</a>           <ul id="g-audience-links">             <li><a href="http://portal.unimelb.edu.au/">Current Students</a></li>             <li><a href="http://www.unimelb.edu.au/staff/">Staff</a></li>             <li><a href="http://alumni.unimelb.edu.au/">Alumni</a></li>             <li><a href="http://library.unimelb.edu.au/">Library</a></li>           </ul>           <div id="g-global-search-overlay">             <form method="get" action="http://search.unimelb.edu.au/" name="g-searchform" id="g-searchform" role="search">               <label for="q"><span>Search the university</span></label>               <input accesskey="s" type="search" name="q" id="q" value="" title="Search the University">               <input type="submit" name="sa" id="g-global-search-submit" value="Search">             </form>           </div>         </div>         <hr>         <ol id="g-global-menu" role="navigation" aria-labelledby="g-global-menu-label">           <a id="g-global-menu-logo" href="http://www.unimelb.edu.au">The University of Melbourne</a>           <li id="g-global-menu-label">Browse the University</li>           <li><a href="http://coursesearch.unimelb.edu.au" id="g-global-menu-study">Study</a></li>           <li><a href="http://unimelb.edu.au/research/" id="g-global-menu-research">Research</a></li>           <li><a href="http://unimelb.edu.au/engage/" id="g-global-menu-community">Engage</a></li>           <li><a href="http://brand.unimelb.edu.au/global/contact-maps.html" id="g-global-menu-contact-maps" class="last">Contact &amp; Maps</a></li>         </ol>         <hr class="g-clear-floats">       </div>     </div>
+        <div id="g-header-blue-block"></div>
+        <span class="g-clear-floats"></span>
+        <header id="branding" role="banner">
+            <div class="header">
+                <div class="hgroup">
+                    <h1><a href="http://findanexpert.unimelb.edu.au/">Find an Expert</a></h1>
+                </div>
+                <hr>
+            </div>
+        </header>
+        <div class="topnav">
+            <div class="wrapper">
+                <div class="inside">
+                    <ul>
+                        <li ><a href="http://findanexpert.unimelb.edu.au/">Home</a></li>
+                        <li ><a href="http://findanexpert.unimelb.edu.au/organisations">Experts by Organisation</a></li>
+                        <li ><a href="http://findanexpert.unimelb.edu.au/classifications">Experts by Research Classification</a></li>
+                        <li ><a href="http://findanexpert.unimelb.edu.au/internationalLinkages">Experts by International Linkage</a></li>
+                        <li class="last"><a href="http://findanexpert.unimelb.edu.au/research">Our Research</a></li>
+                    </ul>
+                    <ul style="float: right;">
+                        <li class="last"><a href="http://search-au.funnelback.com/s/search.html?query=&collection=unimelb-researchers">Search</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wrapper">
+            <div id="wrapper-content" role="main">        
+                <div class="main" id="main-content" role="main">
+                    <div class="col-8">
+                        <!--[if lte IE 8]>
+                                <p class="ie-alert">This site uses HTML elements that are not recognized by Internet Explorer 8 and below. As a result, the site will not be rendered appropriately. To correct this, please upgrade to Internet Explorer 9, or use another browser.</p>
+                        <[endif]-->
+                        <h2>Find an Expert: Capability Map</h2>
+                        <p>Build a &lsquo;first pass&rsquo; capability map by typing in a<!-- set of--> search term<!--s--> that could be said to represent a broad research capability.</p>        
+        
+                        <div id="queryform">
+                            <p>
+                                <span>
+                                    <input name="query" id="query" size="34" value="" onfocus="" 
+                                    accesskey="q" onblur="" type="text" onkeydown="queryKeyDown(event);">
+                                    <label id="cutofflabel" for="queryCutoff">Cutoff:</label>
+                                    <input id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="10">
+                                    <input type="submit" value="Search" id="add" type="button" 
+                                        onclick="addKwd();">
+                                    <input value="Search and Expand" type="submit" id="sExpand" onclick="expandLastQuery = 1; addKwd();" >
+                                    <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
+                                    <a style="display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" onclick="showhideadvanced(this)">Show advanced</a>
+                                </span>
+                                <input name="collection" value="go8_melb_local" type="hidden">
+                            </p>
+                        </div> <!-- id="queryform" -->
+        
+                        <hr style="clear:both;">
+                        <div class="advanced" id="advanced_options">
+                            <p>
+                                <label>Color scheme:</label>
+                                <select id="colorScheme">
+                                    <option value="white">White</option>
+                                    <option value="black">Black</option>
+                                </select>
+                                <label>Link color:</label>
+                                <select id="linkColor">
+                                    <option value="#D0D0D0">Lightest</option>
+                                    <option value="#B8B8B8" selected>Light</option>
+                                    <option value="#999">Medium</option>
+                                    <option value="#777">Medium-Dark</option>
+                                    <option value="#555">Dark</option>
+                                </select>
+                                <label>Gravity:</label>
+                                <input type="text" id="graph_gravity" value="1" style="width:25px">
+                                <label>Charge:</label>
+                                <input type="text" id="graph_charge" value="-1500">
+                                <label>Link distance:</label>
+                                <input type="text" id="graph_linkdistance" value="40" style="width:25px">
+                                <input type="submit" onclick="render()" value="Re-render">
+                                <input type="submit" onclick="restoreDefaults()" value="Default">
+                            </p>
+                        </div>
+                        <!-- Tier bar customisation -->
+<hr>
+                        <div id="container">
+                            <div id="center-container">
+                               
+                                <div id="log"></div>
+                                <div id="infovis"></div> 
+                                <div class="progress"><div id="progressbar"></div></div>
+                                <script type="text/javascript">
+                                    var progressBar = new ProgressBar($("#progressbar"));
+                                </script>
+                            </div>
+        
+                            <div id="right-container">
+                                <div class="tabs">  
+                                    <ul  class="titles">
+                                        <li><a href="#demo">Search terms</a></li>
+                                        <li><a href="#logg">Info</a></li>
+                                        <li><a href="#extractData">Data</a></li>
+                                    </ul>
+        
+                                    <div class="result_body">
+                                        <div class="result_section" id="demo">
+                                            <h2>Current search terms</h2>
+                                            <ul id="log_printout">
+                                                <li>This panel displays a list of the search terms currently
+                                                on the graph. Search for something to begin.</li>
+                                            </ul>
+                                            <p style="position:absolute; bottom:10px">
+                                                <img src="key.png" alt="Key">
+                                            </p>
+                                        </div>
+                                        <div class="result_section" id="logg">
+                                            <div id="inner-details">
+                                                <p>
+                                                    This panel displays information about individual
+                                                    search terms and groups. Click on a group to display
+                                                    its information.
+                                                </p>
+                                            </div>
+                                        </div>
+  
+                                        <div class="result_section" id="extractData">
+                                            <h2>Extract Data</h2>
+                                            <p>
+                                                Import:
+                                                <!--button disabled>SVG</button-->
+                                                <button onclick="importGraphDetails();">JSON</button>
+                                            <br>
+                                                Export:
+                                                <button onclick="generateGraphSVG();">SVG</button>
+                                                <button onclick="download(g.export(), 'json')">JSON</button>
+                                                <button onclick="download(g.toDOT(), 'gv')">DOT</button>
+                                                <button onclick="generateGraphPersonList();">MRW</button>
+                                            </p>
+                                            <textarea id="graphDetails" style="width:99%; height:450px; border:1px solid #EEE; padding:0px;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>            
+                            </div>
+                            <form id="download" method="post" style="display:none">
+                                <textarea name="content" id="exportContent"></textarea>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+        
+        </div> <!-- #wrapper-content -->
+        <hr class="g-clear-floats" />
+    </div>
+
+    </body>
+</html>
+
