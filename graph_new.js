@@ -351,7 +351,9 @@ var FullResultQueryUnit = function(capabilities, person) {
 FullResultQueryUnit.prototype.fetch = function() {
     var query = this.person.queryText(this.capabilities);
     query = encodeURI(query);
-    var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&&topic.max_clusters=40&form=faeJSON&query=" + query + "&num_ranks=1&callback=ipretFullResults"
+//    var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&&topic.max_clusters=40&form=faeJSON&query=" + query + "&num_ranks=1&callback=ipretFullResults"
+//    var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&&topic.max_clusters=40&form=faeJSON&query=" + query + "&num_ranks=1&callback=ipretFullResults"
+    var res1 = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&&topic.max_clusters=40&form=faeJSON&query=" + query + "&num_ranks=1&callback=ipretFullResults"
     var request = new JSONscriptRequest(jsonurl);
     request.buildScriptTag();
     request.addScriptTag();
@@ -463,8 +465,9 @@ DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
                         .addClass("person_details")
                         .append(!p.info._source.name ? $("<span/>") : ($("<img/>")
                             .attr("src", p.info._source.thumbnail)
-                            .attr("width", 50)
-                            .css({"float" : "right", "margin-top" : "10px", "clear" : "both"}))
+//                            .attr("width", 50)
+ //                           .css({"float" : "right", "margin-top" : "10px", "clear" : "both"})
+                        )
                         )
                         .append($("<h3/>")
                             .css({"clear" : "none"})
@@ -552,7 +555,8 @@ var loadCapability = function() {
         disableSubButton(); 
         var query = queryQueue.pop();
 //        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
-        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:Trade&callback=ipretResults"
+//        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:Trade&callback=ipretResults"
+        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
         var request = new JSONscriptRequest(jsonurl);
         request.buildScriptTag();
         request.addScriptTag();
@@ -565,12 +569,14 @@ var addKwd = function(kwd) {
     }
     loadCapability();
 }
-var ipretResults = function(results) {
+var ipretResults = function(results,query) {
+    console.log(results);
     var resultlist = results.hits["hits"];
     if (!resultlist.length || resultlist[0]["_id"] === undefined) enableSubButton();
     else {
  //DRE       var term = resultlist[0]["query"];
-        var term = "Trade";
+//        var term = "Trade";
+        var term = $('#query').val();;
         if (!g.hasCapability(term)) {
             var c = new Capability(term, queryCutoffElem.value, resultlist.length);
             var people = [];
