@@ -1,16 +1,11 @@
 CapabilityMaps
 ==============
-This interface was designed and developed by Matěj Korvas, Martin Kwok, Melissa Makin, and Simon Porter.
-For further information contact simon.porter@unimelb.edu.au.
+This is a force directed graph that allows a user to find intersections of people across disciplines.
+It uses D3 to render and searches an ElasticSearch index.
+The Elastic index is populated by vivo data via the code in https://github.com/tetherless-world/dco-elasticsearch
 
-The Capability Map interface was designed to work with the Funnelback search engine over University of Melbourne VIVO data
-
-Funnelback indexs VIVO data via the supplied SPARQL query.
-The resulting data is then mapped to Funnelback metadata fields (see xml.cfg)
-
-The funnelback browser has been configure to output two JSON search result types.
-
-The freemarker templates for these are included for reference.
+The original interface was designed and developed by Matěj Korvas, Martin Kwok, Melissa Makin, and Simon Porter from University of Melbourne.
+The Capability Map interface was originally designed to work with the Funnelback search engine over University of Melbourne VIVO data
 
 To render the capability maps, an interface has been built using d3js over the JSON search objects.
 
