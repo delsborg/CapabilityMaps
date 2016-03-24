@@ -148,6 +148,10 @@ Graph.prototype.getCapabilities = function() {
         }, []));
     }, []);
 }
+Graph.prototype.getAllCapabilities = function() {
+   var reIds = new Array();
+   return $.each(g.people, function(k,v) { $.each(v.info._source.researchArea, function(x,y) {return y;} ) } );
+}
 Graph.prototype.removeGroup = function(group) {
     var that = this;
     $.each(group.people, function(key, person) { delete that.people[person.id]; });
@@ -399,12 +403,15 @@ DetailsPanel.prototype.showDetails = function(mode, id) {
                 })
             )
             .append($("<span> </span>"))
+	    /*
             .append($("<button>Expand</button>")
                 .bind("click", function() {
                     expandLastQuery = 1;
                     addKwd(decodeURIComponent(id));
                 })
-            ).append(
+            )
+	    */
+	    .append(
                 g.groups.reduce(function(div, group, i) {
                     if (group.capabilities.map(function(c) { return c.term; }).indexOf(id) != -1) {
 
@@ -430,11 +437,13 @@ DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
     var that = this;
     var departments = {};
     var deptNames = [];
+    var deptURI = [];
     $.each(group.people, function(key, person) {
        $.each(person.info._source.organization, function(k,i) {
            if (!departments[i.name]) {
 	        departments[i.name] = 0;
                 deptNames.push(i.name);
+                deptURI.push(i.uri);
 	   }
 	 departments[i.name]++;
        });
@@ -488,6 +497,10 @@ DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
                             )
                         )
                  //       .append($("<p>" + p.info["md_4"].replace(/\|/g, " / ") + "</p>").css("font-style", "italic"))
+                        .append($("<a>" + p.info._source.organization[0].name +"</a>").css("font-style", "italic")
+                                .attr("href", p.info._source.organization[0].uri)
+                                .attr("target", "_blank")
+	                )
                         .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_8"], "grants"))
                         .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_U"], "publications"))
 
@@ -556,7 +569,8 @@ var loadCapability = function() {
         var query = queryQueue.pop();
 //        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:Trade&callback=ipretResults"
-        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
+        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name:" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
+//        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
         var request = new JSONscriptRequest(jsonurl);
         request.buildScriptTag();
         request.addScriptTag();
@@ -845,6 +859,29 @@ var render = function() {
                 )
                 .prepend($("<input/>").attr("type", "checkbox")
                     .attr("name", c.term)                   
+                )
+            );
+    });
+    $("#log_printout").append("<h2>Potential Associated Research Terms</h2>");
+    $("#log_printout").append($("<button>Add selected</button>").bind("click", function() {
+        $("input[type=checkbox]:checked").each(function() {
+            g.addCapability($(this).attr("name"));
+            $(this).parent().add();
+        });
+        render();
+    }));
+    $.each(g.getAllCapabilities(), function(i, c) {
+        $("#log_printout")
+            .append($("<li/>")
+                .append($("<a> " + decodeURI(c.name) + "</a>")
+                    .bind("click", function() {
+                        highlight(c.name);
+                        detailsPane.showDetails("capability", c.name);
+                    })
+                    .css("cursor", "pointer")
+                )
+                .prepend($("<input/>").attr("type", "checkbox")
+                    .attr("name", c.name)                   
                 )
             );
     });
