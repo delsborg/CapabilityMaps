@@ -292,6 +292,14 @@ hr {
 .advanced {
     display:none;
 }
+.person-info {
+    margin-top:3px;
+    border: 1px solid green;
+}
+.thumbnail img {
+    width: 50px;
+    float: right; margin-top: 10px; clear: both;
+}
 .person_details {
     margin-top:3px;
     border: 1px solid green;

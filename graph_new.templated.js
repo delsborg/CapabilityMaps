@@ -148,32 +148,26 @@ Graph.prototype.getCapabilities = function() {
         }, []));
     }, []);
 }
-Graph.prototype.getAllCapabilities = function(g) {
+Graph.prototype.getAllCapabilities = function() {
    var reIds = {};
-   var z = {};
-   var term = $('#query').val();;
    $.each(g.people, function(k,v) {  
-       $.each(v.info._source.researchArea, 
-          function(k,v) { 
-//          reIds[v.name]=v.uri; 
-            if (term.valueOf() != v.name.valueOf() )
-	    {
-	       if (!reIds[v.name]) {
-	         reIds[v.name] = 0;
-               }
-               reIds[v.name]++;
-	    }
-        });
+                                    $.each(v.info._source.researchArea, 
+				        function(k,v) { 
+//				   reIds[v.name]=v.uri; 
+
+				   if (!reIds[v.name]) {
+	                                   reIds[v.name] = 0;
+                                     }
+                                   reIds[v.name]++;
+	                        });
 //					   console.log(reIds[v.name]);
 	                                } ) 
-   var finalRet = Object.keys(reIds).sort(function(a,b) { return reIds[b]-reIds[a]}); 
+	return reIds;
+	/*
+   var finalRet = Object.keys(reIds).sort(function(a,b) { return reIds[a]-reIds[b]}); 
    console.log(finalRet);
-   $.each(finalRet, function(x,y) { 
-             z[y] = reIds[y]; 
-    });
-//return (finalRet,reIds);
-//   return finalRet;
-return z;
+   return finalRet;
+   */
 }
 Graph.prototype.removeGroup = function(group) {
     var that = this;
@@ -455,36 +449,20 @@ DetailsPanel.prototype.showDetails = function(mode, id) {
             );
             title.after(DetailsPanel.makebarchart(deptNames, departments));
     } else {
-          $(this.panel).empty().append(this.groupInfo(id, g.groups[id], mode, id));
-
-
-       $.each(g.getAllCapabilities(g.groups[id]), function(i, c) { 
-            console.log(i);
-	    console.log(c);
-            $("#other_terms")
-            .append($("<li/>")
-  //          .append($("<a> " + i +  "</a>")
-               .append($("<a> " + i + ": " + c + "</a>")
-                    .bind("click", function() {
-                        highlight(i);
-                        detailsPane.showDetails("capability", i);
-                    })
-                    .css("cursor", "pointer")
-                )
-                .prepend($("<input/>").attr("type", "checkbox")
-                    .attr("name", i)                   
-                )
-            );
-       });
-
-
-       }
+        $(this.panel).empty().append(this.groupInfo(id, g.groups[id], mode, id));
+        var frag = "";
+        $.each(g.groups[id].people, function(i,p) {
+           frag += template(p.info._source);
+        });
+	$('#peep-details').html(frag);
+    }
 } 
 DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
     var that = this;
     var departments = {};
     var deptNames = [];
     var deptURI = [];
+
     $.each(group.people, function(key, person) {
        $.each(person.info._source.organization, function(k,i) {
            if (!departments[i.name]) {
@@ -514,8 +492,10 @@ DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
             })
         )
         .append(DetailsPanel.makebarchart(deptNames, departments))
-        .append(
-            group.people.reduce(function(div, p, i) {
+	.append($('<table class="table table-striped table-bordered" id="peep-details" dir="auto"></table>'));
+//        .append(
+//        group.people.reduce(function(div, p, i) {
+/*
                 return div
                     .append($("<div>")
                         .addClass("person_details")
@@ -543,20 +523,19 @@ DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
                                 }(i))
                             )
                         )
-                 //       .append($("<p>" + p.info["md_4"].replace(/\|/g, " / ") + "</p>").css("font-style", "italic"))
                         .append($("<a>" + p.info._source.organization[0].name +"</a>").css("font-style", "italic")
                                 .attr("href", p.info._source.organization[0].uri)
                                 .attr("target", "_blank")
 	                )
-                        .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_8"], "grants"))
-                        .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_U"], "publications"))
 
                         
                         
                     )
-                
-            }, $("<div/>"))
-        );
+            */    
+           // }
+	 //   , $("<div/>"))
+    //    )
+//	.append($("</table>"));
 }
 DetailsPanel.makeslidedown = function(q, l, name) {
     return l != undefined
@@ -616,7 +595,7 @@ var loadCapability = function() {
         var query = queryQueue.pop();
 //        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:Trade&callback=ipretResults"
-        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:%22" + encodeURIComponent(query) + "%22&size=500" + "&callback=ipretResults"
+        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name:" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
         var request = new JSONscriptRequest(jsonurl);
         request.buildScriptTag();
@@ -917,13 +896,12 @@ var render = function() {
         });
         render();
     }));
-    $.each(g.getAllCapabilities(g), function(i, c) { 
+    $.each(g.getAllCapabilities(), function(i, c) { 
          console.log(i);
 	 console.log(c);
          $("#other_terms")
             .append($("<li/>")
-  //          .append($("<a> " + i +  "</a>")
-            .append($("<a> " + i + ": " + c + "</a>")
+            .append($("<a> " + i + "</a>")
                     .bind("click", function() {
                         highlight(i);
                         detailsPane.showDetails("capability", i);

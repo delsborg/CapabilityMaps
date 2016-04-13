@@ -8,12 +8,13 @@
 
      <link rel="stylesheet" href="complete.css">
 
-        <link rel="stylesheet" href="http://www.findanexpert.unimelb.edu.au/css/edit.css">
+<!--        <link rel="stylesheet" href="http://www.findanexpert.unimelb.edu.au/css/edit.css">
         <link rel="stylesheet" href="http://findanexpert.unimelb.edu.au/themes/unimelb/css/screen.css">
-        <link rel="stylesheet" href="http://www.findanexpert.unimelb.edu.au/themes/unimelb/css/custom2.css">
+        <link rel="stylesheet" href="http://www.findanexpert.unimelb.edu.au/themes/unimelb/css/custom2.css"> -->
         <link  rel="stylesheet" type="text/css" href="graph.css">
 
-        <script type="text/javascript" src="http://www.findanexpert.unimelb.edu.au/js/jquery.js"></script>
+        <!-- <script type="text/javascript" src="http://www.findanexpert.unimelb.edu.au/js/jquery.js"></script> -->
+	<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js'></script>
         <script type="text/javascript" src="jquery.color.js"></script>
         <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.1/handlebars.min.js"></script>
@@ -28,25 +29,13 @@
                 <div class="thumbnail">
                     {{#if thumbnail}}<img src="{{thumbnail}}">{{/if}}
                     <div class="caption">
-                        <h5><small>
-                            {{#if dcoId}}
-                            <a class="{{#if isDcoMember}}dco-logo{{/if}}" href="{{dcoId}}" target="_blank">{{name}}</a>
-                            {{else}}
-                            <a class="{{#if isDcoMember}}dco-logo{{/if}}" href="{{uri}}" target="_blank">{{name}}</a>
-                            {{/if}}
-                        </small></h5>
                     </div>
                 </div>
                 <div class="person-info">
-                    {{#if (showMostSpecificType mostSpecificType)}}<div><em class="small">{{mostSpecificType}}</em></div>{{/if}}
-                    {{#if email}}<div><strong>Email: </strong><a href="mailto:{{email}}">{{email}}</a></div>{{/if}}
-                    {{#if orcid}}<div><strong>ORCID ID:</strong> <a href="{{orcidURL orcid}}" target="_blank">{{orcid}}</a></div>{{/if}}
-
-
-                    {{#if organization}}
-                    <div><strong>Organizations:</strong> {{#expand organization}}<a href="{{uri}}" target="_blank">{{name}}</a>{{/expand}}</div>
+                    {{#if name}}
+                    <div><strong>{{name}}</strong></div>
                     {{/if}}
-
+                    {{#if email}}<div><a href="mailto:{{email}}">{{email}}</a></div>{{/if}}
                     {{#if affiliations}}
                     <div><strong>Affiliations:</strong></div>
                     {{#list affiliations}}{{position}} - <a href="{{org.uri}}">{{org.name}}</a>{{/list}}
@@ -64,6 +53,32 @@
             </td>
         </tr>
     </script>
+
+  
+    <script type="text/javascript">
+       Handlebars.registerHelper('expand', function(items, options) {
+         var out = "";
+         var j = items.length - 1;
+         for(var i = 0; i < items.length; i++) {
+               out += options.fn(items[i]);
+               if(i < j) {
+                   out += "; ";
+             }
+         }
+															                   return out;
+      });
+
+       Handlebars.registerHelper('list', function(items, options) {
+	      var out = "<ul>";
+	      for(var i=0, l=items.length; i<l; i++) {
+	            out = out + "<li>" + options.fn(items[i]) + "</li>";
+	      }
+	      return out + "</ul>";
+       });
+
+
+    </script>
+
 
     <script type="text/javascript">
     var source = $("#person-template").html();
