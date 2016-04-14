@@ -87,7 +87,7 @@
                         <div id="queryform">
                             <p>
                                 <span>
-                                    <input name="query" id="query" size="34" value="" onfocus="" 
+                                    <input name="query" id="query" list="capitallist" size="34" value="" onfocus=""
                                     accesskey="q" onblur="" type="text" onkeydown="queryKeyDown(event);">
                                     <label id="cutofflabel" for="queryCutoff">Cutoff:</label>
                                     <input id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="100">
@@ -96,10 +96,12 @@
                                     <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
                                     <a style="display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" onclick="showhideadvanced(this)">Show advanced</a>
                                 </span>
+                                <datalist id="capitallist"></datalist>
                                 <input name="collection" value="go8_melb_local" type="hidden">
                             </p>
                         </div> <!-- id="queryform" -->
-        
+                        <script src="script.js"></script>
+
                         <hr style="clear:both;">
                         <div class="advanced" id="advanced_options">
                             <p>

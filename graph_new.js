@@ -616,7 +616,7 @@ var loadCapability = function() {
         var query = queryQueue.pop();
 //        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:Trade&callback=ipretResults"
-        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:%22" + encodeURIComponent(query) + "%22&size=500" + "&callback=ipretResults"
+        var jsonurl = "https://vivo.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:%22" + encodeURIComponent(query) + "%22&size=500" + "&callback=ipretResults"
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
         var request = new JSONscriptRequest(jsonurl);
         request.buildScriptTag();
