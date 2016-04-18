@@ -121,25 +121,30 @@ var Graph = function() {
     this.groups = [];
     this.people = {};
 }
+
 Graph.prototype.addGroup = function(g) {
     this.groups.push(g);
 }
+
 Graph.prototype.createPerson = function(info) {
     if (info["_id"] in this.people) return this.people[info["_id"]];
     var p = new Person(info);
     this.people[p.id] = p;
     return p;
 }
+
 Graph.prototype.addCapability = function(c, people) {
     if ((people = this.groups.reduce(function(ps, group) {
         return group.merge(c, ps);
     }, people)).length) this.groups.push(new Group(this, [c], people));
 }
+
 Graph.prototype.hasCapability = function(term) {
     return this.getCapabilities().reduce(function(acc, v) {
         return acc || v.term == term;
     }, false);
 }
+
 Graph.prototype.getCapabilities = function() {
     return this.groups.reduce(function(capabilities, group) {
         return capabilities.concat(group.capabilities.reduce(function(cs, c) {
@@ -148,33 +153,49 @@ Graph.prototype.getCapabilities = function() {
         }, []));
     }, []);
 }
+
 Graph.prototype.getAllCapabilities = function(g) {
    var reIds = {};
    var z = {};
-   var term = $('#query').val();;
+    var x = {};
+    var a = [];
+
+    function topic(rname, count) {
+        this.name = rname;
+        this.count = count;
+    }
+    var rtopic = topic;
+
+   var term = $('#query').val();
    $.each(g.people, function(k,v) {  
        $.each(v.info._source.researchArea, 
-          function(k,v) { 
-//          reIds[v.name]=v.uri; 
-            if (term.valueOf() != v.name.valueOf() )
-	    {
-	       if (!reIds[v.name]) {
-	         reIds[v.name] = 0;
-               }
-               reIds[v.name]++;
-	    }
+          function(k,v) {
+              var cnt = 0;
+              $.each(g.capabilities, function(ck,cv){
+                  if (cv.term == v.name.valueOf() ) {cnt = 1;}
+              });
+              if (cnt == 0 )
+              {
+                 if (!reIds[v.name]) {reIds[v.name] = 0;}
+                 reIds[v.name]++;
+              }
         });
-//					   console.log(reIds[v.name]);
-	                                } ) 
+   } );
    var finalRet = Object.keys(reIds).sort(function(a,b) { return reIds[b]-reIds[a]}); 
    console.log(finalRet);
-   $.each(finalRet, function(x,y) { 
-             z[y] = reIds[y]; 
+   $.each(finalRet, function(x,y) {
+       console.log(x);
+       console.log(y);
+             z[y] = reIds[y];
+       rtopic.rname=y;
+       rtopic.count=reIds[y];
+       a.push({rname: y, count: reIds[y]});
     });
 //return (finalRet,reIds);
 //   return finalRet;
-return z;
+return a;
 }
+
 Graph.prototype.removeGroup = function(group) {
     var that = this;
     $.each(group.people, function(key, person) { delete that.people[person.id]; });
@@ -457,26 +478,42 @@ DetailsPanel.prototype.showDetails = function(mode, id) {
     } else {
           $(this.panel).empty().append(this.groupInfo(id, g.groups[id], mode, id));
 
-
-       $.each(g.getAllCapabilities(g.groups[id]), function(i, c) { 
-            console.log(i);
-	    console.log(c);
-            $("#other_terms")
+        // Remove all previous other terms -- clear that list out
+        d3.select('#other_terms').selectAll("li").remove();
+        //Now add the terms
+        $.each(g.getAllCapabilities(g.groups[id]), function(i, c) {
+           $("#other_terms")
             .append($("<li/>")
-  //          .append($("<a> " + i +  "</a>")
-               .append($("<a> " + i + ": " + c + "</a>")
+               .append($("<a> " + c.rname + ": " + c.count + "</a>")
                     .bind("click", function() {
-                        highlight(i);
-                        detailsPane.showDetails("capability", i);
+                        highlight(c.rname);
+                        detailsPane.showDetails("capability", c.rname);
                     })
                     .css("cursor", "pointer")
                 )
-                .prepend($("<input/>").attr("type", "checkbox")
-                    .attr("name", i)                   
-                )
+                .prepend($("<input/>").attr("type", "checkbox").attr("name", c.rname))
             );
        });
 
+  /*    Attempting to create the checkboxes with D3 -- problem is that the checkbox input is appended to the label. I need it prepended
+        d3.select('#other_terms').selectAll("li").remove();
+        var allcaps=g.getAllCapabilities(g.groups[id]);
+        var otherlist=d3.select('#other_terms').selectAll("li").data(allcaps);
+        //var otherlist=d3.select('#other_terms').selectAll("li").data(g.groups[id].people[0].info._source.researchArea);
+        otherlist.exit().remove();
+        otherlist.enter().append("li")
+            .append('label')
+            .text(function (d){
+                return d.rname + ": " + d.count;
+            })
+            .append("input")
+                .attr("checked", false)
+                .attr("type", "checkbox")
+                .attr("id", function(d,i) { return 'a'+i; })
+                .attr("onClick", "change(this)")
+            ;
+
+ */
 
        }
 } 
@@ -917,24 +954,38 @@ var render = function() {
         });
         render();
     }));
-    $.each(g.getAllCapabilities(g), function(i, c) { 
-         console.log(i);
-	 console.log(c);
-         $("#other_terms")
+
+    // Remove all previous other terms -- clear that list out
+    d3.select('#other_terms').selectAll("li").remove();
+    //Now add the terms
+    $.each(g.getAllCapabilities(g.groups[0]), function(i, c) {
+        $("#other_terms")
             .append($("<li/>")
-  //          .append($("<a> " + i +  "</a>")
-            .append($("<a> " + i + ": " + c + "</a>")
+                .append($("<a> " + c.rname + ": " + c.count + "</a>")
                     .bind("click", function() {
-                        highlight(i);
-                        detailsPane.showDetails("capability", i);
+                        highlight(c.rname);
+                        detailsPane.showDetails("capability", c.rname);
                     })
                     .css("cursor", "pointer")
-                )
-                .prepend($("<input/>").attr("type", "checkbox")
-                    .attr("name", i)                   
-                )
-         );
+            )
+                .prepend($("<input/>").attr("type", "checkbox").attr("name", c.rname))
+        );
     });
+
+   /* $.each(g.getAllCapabilities(g.groups[0]), function(i, c) {
+ //        console.log(i);
+//	     console.log(c);
+         $("#other_terms")
+            .append($("<li/>").append(
+                 $("<a> " + i + ": " + c + "</a>").bind("click", function() {
+                        highlight(i);
+                        detailsPane.showDetails("capability", i);
+                    }).css("cursor", "pointer")
+                     )
+                .prepend($("<input/>").attr("type", "checkbox").attr("name", i))
+            );
+
+    }); */
 }
 var highlight = function(identifier) {
     unhighlight();
