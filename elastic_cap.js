@@ -20,12 +20,13 @@
     */
     function createList(rtopics) {
       // get the datalist element
-        var datalist = $("#rtopiclist");
-
+        var datalist = $("#srtopiclist");
+     //   $('<select>').appendTo(datalist)
         // Fill it with the rtopics array
         for(var i=0; i < rtopics.length; i++){
             $('<option>'+rtopics[i]+'</option>').appendTo(datalist);
         }
+      //  $('</select>').appendTo(datalist)
     }
 
 

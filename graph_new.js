@@ -65,9 +65,6 @@ var Capability = function(term, cutoff, numpeople) {
 var Person = function(info) {
     this.id = info["_id"];
     this.info = info;
-//DRE    this.info["md_Z"] = this.info["md_Z"].replace(/^.*\|/g, ""); // stop things like "PROFTAYLOR|PROF"
-//DRE    this.info["md_A"] = this.info["md_A"].replace(/<\/?strong>/g, "");
-//DRE    this.info["md_B"] = this.info["md_B"].replace(/<\/?strong>/g, "");
     this.fullInfo = {};
 }
 Person.prototype.fullname = function() {
@@ -649,11 +646,11 @@ var loadCapability = function() {
     if (hidden) unhide();
     if (!queryQueue.length) finish();
     else {
-        disableSubButton(); 
+        disableSubButton();
         var query = queryQueue.pop();
 //        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:Trade&callback=ipretResults"
-        var jsonurl = "https://vivo.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:%22" + encodeURIComponent(query) + "%22&size=500" + "&callback=ipretResults"
+        var jsonurl = "https://vivo.colorado.edu/es/fis/person/_search?q=researchArea.name:%22" + encodeURIComponent(query) + "%22&size=500" + "&callback=ipretResults"
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
         var request = new JSONscriptRequest(jsonurl);
         request.buildScriptTag();
@@ -661,10 +658,12 @@ var loadCapability = function() {
     }
 }
 var addKwd = function(kwd) {
+    queryElem.value = capitalizeWords(queryElem.value);
     if (kwd !== false) {
         if (!kwd) window.location.hash = encodeURI(queryElem.value + "|" + queryCutoffElem.value + "|" + expandLastQuery);
         queryQueue.push(kwd || queryElem.value);
     }
+    $('#query').val(queryElem.value);
     loadCapability();
 }
 var ipretResults = function(results,query) {
@@ -674,7 +673,7 @@ var ipretResults = function(results,query) {
     else {
  //DRE       var term = resultlist[0]["query"];
 //        var term = "Trade";
-        var term = $('#query').val();;
+        var term = $('#query').val();
         if (!g.hasCapability(term)) {
             var c = new Capability(term, queryCutoffElem.value, resultlist.length);
             var people = [];
@@ -1128,7 +1127,32 @@ var unhide = function() {
     $("#helptext").fadeOut();
     $("#center-container").fadeIn();
 }
-   
+
+function capitalizeWords(str) {
+    str = str.toLowerCase();
+    //return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+        //if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+        // return index == 0 ? match.toUpperCase() : match.toLowerCase();
+        return match.toUpperCase();
+        // urn index == 0 ?  match.toUpperCase();
+    });
+}
+
+function GetURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam)
+        {
+            return sParameterName[1];
+        }
+    }
+}
+
 function run_demo(demoValues) {
     demoValues.forEach(function(query) {
         queryQueue.push(query); 
@@ -1194,12 +1218,21 @@ $(document).ready(function() {
     // URL hash reading
     if (window.location.hash != "") {
         var preset = decodeURI(window.location.hash).slice(1).split("|");
-        queryElem.value = preset[0];
+        queryElem.value = capitalizeWords(preset[0]);
+        $('#query').val(queryElem.value);
         queryCutoffElem.value = preset[1];
         if (preset[2] == "1") expandLastQuery = 1;
         addKwd();
     }
-    
+
+    /*
+    var topic = GetURLParameter('query');
+    var cnt = GetURLParameter('cnt');
+    $('#query').val(topic);
+    addKwd(topic);
+    */
+
+    /*
     // queryfield
     $("#query").bind("focus", function() {
         $(this).data("previous", $(this).val());
@@ -1210,6 +1243,7 @@ $(document).ready(function() {
         else $(this).data("previous", $(this).val());
     });
     $("#query").focus();
+    */
     enableSubButton();
     
     // tabs
@@ -1235,4 +1269,8 @@ var transformto = function(a, b) { // a = b
     }
     
 }
+
+
+
+
             

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-        <title>Find an Expert Capability Map</title>
+        <title>CU Expert Connect</title>
 
      <link rel="stylesheet" href="complete.css">
 
@@ -81,14 +81,16 @@
                         <!--[if lte IE 8]>
                                 <p class="ie-alert">This site uses HTML elements that are not recognized by Internet Explorer 8 and below. As a result, the site will not be rendered appropriately. To correct this, please upgrade to Internet Explorer 9, or use another browser.</p>
                         <[endif]-->
-                        <h2>Find an Expert: Capability Map</h2>
+
+                        <h2>CU Expert Connect: Research Network</h2>
+                        <h3>"                                     "(beta) We're adding improvements </h3>
                         <p>Build a &lsquo;first pass&rsquo; capability map by typing in a<!-- set of--> search term<!--s--> that could be said to represent a broad research capability.</p>        
         
                         <div id="queryform">
                             <p>
                                 <span>
-                                    <input name="query" id="query" list="rtopiclist" size="34" value="" onfocus=""
-                                    accesskey="q" onblur="" type="text" onkeydown="queryKeyDown(event);">
+                                    <input name="query" id="query" list="rtopiclist" size="34"
+                                    accesskey="q" type="text" onkeydown="queryKeyDown(event);">
                                     <label id="cutofflabel" for="queryCutoff">Cutoff:</label>
                                     <input id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="100">
                                     <input type="submit" value="Search" id="add" type="button" 
@@ -96,7 +98,9 @@
                                     <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
                                     <a style="display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" onclick="showhideadvanced(this)">Show advanced</a>
                                 </span>
-                                <datalist id="rtopiclist"></datalist>
+                                <datalist id="rtopiclist">
+                                    <select id="srtopiclist"></select>
+                                </datalist>
                                 <input name="collection" value="go8_melb_local" type="hidden">
                             </p>
                         </div> <!-- id="queryform" -->

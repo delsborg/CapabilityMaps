@@ -1,15 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-        <title>HTML5 Autocomplete Example - </title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-</head>
-<body>
-	<h2>Enter an area of Research to find an expert ...</h2>
-	<input type="text" name="capitals" list="capitallist" id="capitals" placeholder="research ..." />
-	<datalist id="capitallist"></datalist>
-	<script src="script.js"></script>
+<head>
+  <title>test</title>
+    <style>
+        input[list="languages"] {
+      width: 12em;
+            border: none;
+          background: #eee;
+      }
+          select {
+        width: 12em;
+      margin: 0;
+            margin-left: -12.75em;
+        }
+  </style>
+  </head>
+  <body>
 
-</body>
-</html>
+  Choose: <input type="text" list="languages">
+  <label for="languages">
+    <datalist id="languages">
+        <select>
+      <option value="JavaScript">JavaScript</option>
+            <option value="Haskell">Haskell</option>
+          <option value="Ruby">Ruby</option>
+        <option value="Go">Go</option>
+      <option value="Python">Python</option>
+            <option value="etc">etc</option>
+        </select>
+  </datalist>
+  </label>
+  </body>
+  </html>
