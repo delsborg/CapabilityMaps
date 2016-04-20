@@ -84,8 +84,8 @@
 
                         <h2>CU Expert Connect: Research Network</h2>
                         <h3>"                                     "(beta) We're adding improvements </h3>
-                        <p>Build a &lsquo;first pass&rsquo; capability map by typing in a<!-- set of--> search term<!--s--> that could be said to represent a broad research capability.</p>        
-        
+                        <p>Build a &lsquo;first pass&rsquo; capability map by typing in a<!-- set of--> search term<!--s--> that could be said to represent a broad research capability.</p>
+
                         <div id="queryform">
                             <p>
                                 <span>
@@ -98,10 +98,12 @@
                                     <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
                                     <a style="display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" onclick="showhideadvanced(this)">Show advanced</a>
                                 </span>
+                                <label for="rtopiclist">
                                 <datalist id="rtopiclist">
                                     <select id="srtopiclist"></select>
                                 </datalist>
-                                <input name="collection" value="go8_melb_local" type="hidden">
+                                </label>
+                                <!-- <input name="collection" value="go8_melb_local" type="hidden"> -->
                             </p>
                         </div> <!-- id="queryform" -->
                         <script src="elastic_cap.js"></script>

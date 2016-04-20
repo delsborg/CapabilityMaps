@@ -24,7 +24,7 @@
      //   $('<select>').appendTo(datalist)
         // Fill it with the rtopics array
         for(var i=0; i < rtopics.length; i++){
-            $('<option>'+rtopics[i]+'</option>').appendTo(datalist);
+            $('<option value="'+rtopics[i]+'">' +rtopics[i]+'</option>').appendTo(datalist);
         }
       //  $('</select>').appendTo(datalist)
     }
