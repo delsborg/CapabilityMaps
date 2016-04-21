@@ -13,14 +13,14 @@
         <link rel="stylesheet" href="custom2.css">
         <link  rel="stylesheet" type="text/css" href="graph.css">
 
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
         <script type="text/javascript" src="jquery.color.js"></script>
         <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.1/handlebars.min.js"></script>
         <script language="javascript" type="text/javascript" src="jsr_class.js"></script>
         <script language="javascript" type="text/javascript" src="graph_new.js"></script>
-        <script language="javascript" type="text/javascript" src="elastic_cap.js"></script>
+        <!--script language="javascript" type="text/javascript" src="elastic_cap.js"></script-->
 
 
 
@@ -75,7 +75,7 @@
 
     </head>
     
-    <body style="padding-top:60px">
+    <body style="padding-top:10px">
         <div class="wrapper">
             <div id="wrapper-content" role="main">        
                 <div class="main" id="main-content" role="main">
@@ -83,30 +83,29 @@
                         <!--[if lte IE 8]>
                                 <p class="ie-alert">This site uses HTML elements that are not recognized by Internet Explorer 8 and below. As a result, the site will not be rendered appropriately. To correct this, please upgrade to Internet Explorer 9, or use another browser.</p>
                         <[endif]-->
+                        <div id="toptxt">
+                            <div id="headtxt">
+                                <div id="wname" style="display:inline-block"><h2 style="float:left">CU Expert Connect:</h2><span style="font-size:20px">Research Map</span></div>
+                                <div id="beta" ><h3> <div id="betabutton" style="background-color: red">beta</div> <div id="betatext">Improvements coming soon</div> </h3></div>
+                            </div>
 
-                        <h2>CU Expert Connect: Research Network</h2>
-                        <h3>"                                     "(beta) We're adding improvements </h3>
-                        <p>Build a &lsquo;first pass&rsquo; capability map by typing in a<!-- set of--> search term<!--s--> that could be said to represent a broad research capability.</p>
-
-                        <div id="queryform">
-
-                                    <input name="query" id="query" list="rtopiclist" size="34" accesskey="q" type="text" onkeydown="queryKeyDown(event);">
-
-                                      <datalist id="rtopiclist">
-                                            <select style="display:none;"></select>
-                                      </datalist>
-
-                                    <label id="cutofflabel" for="queryCutoff">Cutoff:</label>
-                                    <input id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="100">
-                                    <input type="submit" value="Search" id="add" type="button" 
-                                        onclick="addKwd();">
-                                    <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
-                                    <a style="display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" onclick="showhideadvanced(this)">Show advanced</a>
-
-
+                        </div>
+                        <div id="queryform" style="display:inline-block">
+                               <input name="query" id="query" list="rtopiclist" size="34" accesskey="q" type="text" onkeydown="queryKeyDown(event);">
+                               <datalist id="rtopiclist">
+                                    <select style="display:none;"></select>
+                               </datalist>
+                               <label id="cutofflabel" for="queryCutoff">Cutoff:</label>
+                               <input id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="100">
+                               <input type="submit" value="Search" id="add" type="button" onclick="addKwd();">
+                               <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
 
                         </div> <!-- id="queryform" -->
-                        <!--script src="elastic_cap.js"></script-->
+                        <div = "instrtxt">
+                        <BR>Build a network map by typing in a search term that could be said to represent a faculty members research expertise.
+                        <a style="display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" onclick="showhideadvanced(this)">Show advanced</a>
+                    </div>
+
 
                         <hr style="clear:both;">
                         <div class="advanced" id="advanced_options">
@@ -168,9 +167,7 @@
                                                 on the graph. Search for something to begin.</li>
                                             </ul>
 
-                                            <p style="position:absolute; bottom:10px">
-                                                <img src="key.png" alt="Key">
-                                            </p>
+
                                         </div>
                                         <div class="result_section" id="logg">
                                             <div id="inner-details">
@@ -196,6 +193,9 @@
                                                 <button onclick="generateGraphPersonList();">MRW</button>
                                             </p>
                                             <textarea id="graphDetails" style="width:99%; height:450px; border:1px solid #EEE; padding:0px;"></textarea>
+                                            <p style="position:absolute; bottom:10px">
+                                                <img src="key.png" alt="Key">
+                                            </p>
                                         </div>
                                     </div>
                                 </div>            

@@ -52,11 +52,12 @@ console.log('ready elastic_cap 1');
           loadDatas( createList );
               console.log('ready elastic_cap 2');
 
+              /*
               var availableTags = $('#rtopiclist').find('option').map(function () {
                   return this.value;
               }).get();
               $('#query').autocomplete({ source: availableTags });
-
+*/
       });
 
 })(jQuery);

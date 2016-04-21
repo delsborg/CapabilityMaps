@@ -10,6 +10,8 @@ body.fae { background-image: url(statue.jpg); background-color: #036; background
 
 
 */
+#wname {float:left;}
+#beta {padding-left : 20px;float:right;}
 
 #main-content { background-color: rgb(255,255,255); width: 980px ; margin-top : 20px}
 .siteMap { background-color: rgb(255,255,255)}
