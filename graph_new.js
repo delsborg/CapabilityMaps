@@ -1174,6 +1174,10 @@ var queryKeyDown = function(e) {
 
 $(document).ready(function() {
     // elements global variables
+
+console.log('ready graph');
+
+
     subButton = document.getElementById('add');
     queryElem = document.getElementById('query');
     queryCutoffElem = document.getElementById('queryCutoff');
@@ -1256,6 +1260,8 @@ $(document).ready(function() {
         return false;
         });
     $(".tabs ul li:first-child").trigger("click");
+
+
 });
 
 var transformto = function(a, b) { // a = b

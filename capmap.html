@@ -14,11 +14,13 @@
         <link  rel="stylesheet" type="text/css" href="graph.css">
 
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
         <script type="text/javascript" src="jquery.color.js"></script>
         <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.1/handlebars.min.js"></script>
         <script language="javascript" type="text/javascript" src="jsr_class.js"></script>
         <script language="javascript" type="text/javascript" src="graph_new.js"></script>
+        <script language="javascript" type="text/javascript" src="elastic_cap.js"></script>
 
 
 
@@ -87,26 +89,24 @@
                         <p>Build a &lsquo;first pass&rsquo; capability map by typing in a<!-- set of--> search term<!--s--> that could be said to represent a broad research capability.</p>
 
                         <div id="queryform">
-                            <p>
-                                <span>
-                                    <input name="query" id="query" list="rtopiclist" size="34"
-                                    accesskey="q" type="text" onkeydown="queryKeyDown(event);">
+
+                                    <input name="query" id="query" list="rtopiclist" size="34" accesskey="q" type="text" onkeydown="queryKeyDown(event);">
+
+                                      <datalist id="rtopiclist">
+                                            <select style="display:none;"></select>
+                                      </datalist>
+
                                     <label id="cutofflabel" for="queryCutoff">Cutoff:</label>
                                     <input id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="100">
                                     <input type="submit" value="Search" id="add" type="button" 
                                         onclick="addKwd();">
                                     <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
                                     <a style="display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" onclick="showhideadvanced(this)">Show advanced</a>
-                                </span>
-                                <label for="rtopiclist">
-                                <datalist id="rtopiclist">
-                                    <select id="srtopiclist"></select>
-                                </datalist>
-                                </label>
-                                <!-- <input name="collection" value="go8_melb_local" type="hidden"> -->
-                            </p>
+
+
+
                         </div> <!-- id="queryform" -->
-                        <script src="elastic_cap.js"></script>
+                        <!--script src="elastic_cap.js"></script-->
 
                         <hr style="clear:both;">
                         <div class="advanced" id="advanced_options">

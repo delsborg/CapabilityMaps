@@ -1,5 +1,9 @@
+//@ sourceURL=elastic_cap.js
+
 (function($){
     'use strict';
+
+console.log('ready elastic_cap 1');
 
         // The JSON list url
     var esurl = "https://vivo.colorado.edu/es/fis/person/_search?callback=?&source=";
@@ -14,13 +18,9 @@
 
     var esdslreq = "source=" + JSON.stringify(esdsl);
 
-    /**
-     * Create the options from the capitals array
-          * @param {Array} capitals
-    */
     function createList(rtopics) {
       // get the datalist element
-        var datalist = $("#srtopiclist");
+        var datalist = $("#rtopiclist select");
      //   $('<select>').appendTo(datalist)
         // Fill it with the rtopics array
         for(var i=0; i < rtopics.length; i++){
@@ -30,11 +30,7 @@
     }
 
 
-       /**
-            * Load data and call callback function
-         * @param {Function} callback
-      */
-          function loadDatas( callback ){
+     function loadDatas( callback ){
 
           // Make the ajax call
           $.getJSON(esurl, esdslreq, function(list){
@@ -52,7 +48,15 @@
 
       // jQuery OnLoad ...
           $(function(){
+
           loadDatas( createList );
+              console.log('ready elastic_cap 2');
+
+              var availableTags = $('#rtopiclist').find('option').map(function () {
+                  return this.value;
+              }).get();
+              $('#query').autocomplete({ source: availableTags });
+
       });
 
-      })(jQuery);
+})(jQuery);
