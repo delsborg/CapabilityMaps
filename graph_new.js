@@ -479,16 +479,19 @@ DetailsPanel.prototype.showDetails = function(mode, id) {
         d3.select('#other_terms').selectAll("li").remove();
         //Now add the terms
         $.each(g.getAllCapabilities(g.groups[id]), function(i, c) {
-           $("#other_terms")
-            .append($("<li/>")
-               .append($("<a> " + c.rname + ": " + c.count + "</a>")
+           $("#other_terms").append($("<li/>")
+               .append($('<button class="button button1">' + "<a> " + c.rname + ": " + c.count + "</a></button>")
+  //                 .append($("<a> " + c.rname + ": " + c.count + "</a>")
                     .bind("click", function() {
+                           $('#query').val(c.rname );
+                           addKwd();
+                           /*
                         highlight(c.rname);
                         detailsPane.showDetails("capability", c.rname);
+                           */
                     })
                     .css("cursor", "pointer")
                 )
-                .prepend($("<input/>").attr("type", "checkbox").attr("name", c.rname))
             );
        });
 
@@ -648,9 +651,10 @@ var loadCapability = function() {
     else {
         disableSubButton();
         var query = queryQueue.pop();
+        var res;
 //        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=researchArea.name.exact:Trade&callback=ipretResults"
-        var jsonurl = "https://vivo.colorado.edu/es/fis/person/_search?q=researchArea.name:%22" + encodeURIComponent(query) + "%22&size=500" + "&callback=ipretResults"
+        var jsonurl = "https://vivo.colorado.edu/es/fis/person/_search?q=researchArea.name:%22" + encodeURIComponent(query) + "%22&size=500&callback=ipretResults";
 //        var jsonurl = "https://prometheus.int.colorado.edu/es/fis/person/_search?q=" + encodeURIComponent(query) + "&size=500" + "&callback=ipretResults"
         var request = new JSONscriptRequest(jsonurl);
         request.buildScriptTag();
@@ -667,6 +671,7 @@ var addKwd = function(kwd) {
     loadCapability();
 }
 var ipretResults = function(results,query) {
+    console.log(query);
     console.log(results);
     var resultlist = results.hits["hits"];
     if (!resultlist.length || resultlist[0]["_id"] === undefined) enableSubButton();
@@ -935,40 +940,50 @@ var render = function() {
             .append($("<li/>")
                 .append($("<a> " + decodeURI(c.term) + "</a>")
                     .bind("click", function() {
+
                         highlight(c.term);
                         detailsPane.showDetails("capability", c.term);
-                    })
+                                           })
                     .css("cursor", "pointer")
                 )
                 .prepend($("<input/>").attr("type", "checkbox")
-                    .attr("name", c.term)                   
+                    .attr("name", c.term).attr("id", c.term)
                 )
             );
     });
+
+    /*
     $("#other_terms").empty().append($("<button>Add selected</button>").bind("click", function() {
         $("input[type=checkbox]:checked").each(function() {
-            $('#query').val( $(this).attr("name") );   
-            addKwd($(this).attr("name"));
+            $('#query').val( $(this).attr("name") );
+            addKwd();
+//            addKwd($(this).attr("name"));
 //            $(this).parent().add();
+//            render();
         });
-        render();
+//        render();
     }));
-
+*/
     // Remove all previous other terms -- clear that list out
     d3.select('#other_terms').selectAll("li").remove();
     //Now add the terms
     $.each(g.getAllCapabilities(g.groups[0]), function(i, c) {
         $("#other_terms")
             .append($("<li/>")
-                .append($("<a> " + c.rname + ": " + c.count + "</a>")
+                .append($('<button class="button button1">' + "<a> " + c.rname + ": " + c.count + "</a></button>")
                     .bind("click", function() {
+                        $('#query').val(c.rname );
+                        addKwd();
+                        /*
                         highlight(c.rname);
                         detailsPane.showDetails("capability", c.rname);
+                        */
+
                     })
                     .css("cursor", "pointer")
-            )
-                .prepend($("<input/>").attr("type", "checkbox").attr("name", c.rname))
-        );
+            ) );
+
+
     });
 
    /* $.each(g.getAllCapabilities(g.groups[0]), function(i, c) {
@@ -1175,11 +1190,11 @@ var queryKeyDown = function(e) {
 $(document).ready(function() {
     // elements global variables
 
-console.log('ready graph');
+    console.log('ready graph');
 
-
-
-    console.log('ready elastic_cap 1');
+    //check browser for HTML5 datalist
+    var nativedatalist = !!('list' in document.createElement('input')) &&
+        !!(document.createElement('datalist') && window.HTMLDataListElement);
 
     // The JSON list url
     var esurl = "https://vivo.colorado.edu/es/fis/person/_search?callback=?&source=";
@@ -1204,11 +1219,13 @@ console.log('ready graph');
         }
         //  $('</select>').appendTo(datalist)
 
-
-        var availableTags = $('#rtopiclist').find('option').map(function () {
-            return this.value;
-        }).get();
-        $('#query').autocomplete({ source: availableTags });
+// This next section is the polyfill for Safari
+        if (!nativedatalist) {
+            var availableTags = $('#rtopiclist').find('option').map(function () {
+                return this.value;
+            }).get();
+            $('#query').autocomplete({source: availableTags});
+        }
 
     }
 
