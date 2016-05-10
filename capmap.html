@@ -179,16 +179,17 @@
                                         <li><a href="#demo">Search terms</a></li>
                                         <li><a href="#logg">Info</a></li>
                                         <li><a href="#extractData">Data</a></li>
+                                        <li><a href="#feedback">Feedback</a></li>
                                     </ul>
         
                                     <div class="result_body">
                                         <div class="result_section" id="demo">
-                                            <h2>Current Research terms - Choose some to add to the graph</h2>
+                                            <h2>Current Research terms - Click to remove from the graph</h2>
                                             <ul id="log_printout">
                                                 <li>This panel displays a list of the search terms currently
                                                 on the graph. Search for something to begin.</li>
                                             </ul>
-                                            <h2>Potential Associated Research Terms</h2>
+                                            <h2>Potential Associated Research Terms - Choose some to add to the graph</h2>
                                             <ul id="other_terms">
                                                 <li>This panel displays a list of the search terms associated with other researchers
                                                 on the graph. Search for something to begin.</li>
@@ -217,13 +218,27 @@
                                                 <button onclick="generateGraphSVG();">SVG</button>
                                                 <button onclick="download(g.export(), 'json')">JSON</button>
                                                 <button onclick="download(g.toDOT(), 'gv')">DOT</button>
-                                                <button onclick="generateGraphPersonList();">MRW</button>
+                                                <button id="mrw" onclick="generateGraphPersonList()">MRW</button>
                                             </p>
                                             <textarea id="graphDetails" style="width:99%; height:450px; border:1px solid #EEE; padding:0px;"></textarea>
                                             <p style="position:absolute; bottom:10px">
                                                 <img src="key.png" alt="Key">
                                             </p>
                                         </div>
+
+                                        <div class="result_section" id="feedback">
+                                            <form action="MAILTO:vivo@colorado.edu" method="post" enctype="text/plain">
+                                                Name:<br>
+                                                <input type="text" name="name" value=""><br>
+                                                E-mail:<br>
+                                                <input type="text" name="mail" value=""><br>
+                                                Comment:<br>
+                                                <input type="text" name="comment" value="" size="50"><br><br>
+                                                <input type="submit" value="Send">
+                                                <input type="reset" value="Reset">
+                                            </form>
+                                        </div>
+
                                     </div>
                                 </div>            
                             </div>

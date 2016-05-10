@@ -336,9 +336,11 @@ Graph.prototype.export = function() {
     });
 }
 Graph.prototype.toPersonList = function() {
-    var list = "";
+    var list = "Name|Email|VIVO URL\r\n";
+
     $.each(this.people, function(id, person) {
-         list += person.info["md_1"] + "|";
+        var array = typeof person.info._source != 'object' ? JSON.parse(person.info._source) : person.info._source;
+         list += person.info._source.name + "|" + person.info._source.email[0] + "|" + person.info._source.uri + "\r\n";
     });
     return list;
 }
@@ -928,6 +930,8 @@ var render = function() {
             }
         })
     );
+
+   /*
     $("#log_printout").empty().append($("<button>Delete selected</button>").bind("click", function() {
         $("input[type=checkbox]:checked").each(function() {
             g.removeCapability($(this).attr("name"));
@@ -935,6 +939,9 @@ var render = function() {
         });
         render();
     }));
+
+    */
+    /*
     $.each(g.getCapabilities(), function(i, c) {
         $("#log_printout")
             .append($("<li/>")
@@ -951,6 +958,23 @@ var render = function() {
                 )
             );
     });
+*/
+
+    d3.select('#log_printout').selectAll("li").remove();
+    $.each(g.getCapabilities(), function(i, c) {
+        $("#log_printout")
+            .append($("<li/>")
+                .append($('<button class="button button1">' + "<a> " + decodeURI(c.term) + "</a></button>")
+                    .bind("click", function() {
+                        g.removeCapability(c.term);
+                        render();
+                    })
+                    .css("cursor", "pointer")
+            )
+        );
+    });
+
+
 
     /*
     $("#other_terms").empty().append($("<button>Add selected</button>").bind("click", function() {
@@ -1053,10 +1077,18 @@ var importGraphDetails = function() {
     g = Graph.import($("#graphDetails").attr("value"));
     render();
 }
+
+
 var download = function(content, ext) {
-    $("#download").attr("action", "http://115.146.84.185/search/download.php?ext=" + ext);
+//    $("#download").attr("action", "http://115.146.84.185/search/download.php?ext=" + ext);
+    var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content)) + '" download="data.json"';
+    window.open(data)
+//    $('<a href="data:' + data + '" download="data.json">Ds</a>').appendTo('#mrw');
+
+/*
     $("#exportContent").val(content);
     $("#download").submit();
+    */
 }
 var showhideadvanced = function(button) {
     if ($("#advanced_options").data("shown") != true) {
@@ -1245,6 +1277,8 @@ $(document).ready(function() {
             callback(rtopics.sort());
         });
     }
+
+
 
     // jQuery OnLoad ...
     $(function(){
