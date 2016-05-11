@@ -1063,7 +1063,10 @@ var unhighlight = function() {
 }
 
 var generateGraphPersonList = function() {
-    $("#graphDetails").attr("value", g.toPersonList());
+  //  var data = "data:text/csv;charset=utf-8," + $("#graphDetails").attr("value", g.toPersonList()) + '" download="data.csv"' ;
+    var data = "data:text/csv;charset=utf-8," +  g.toPersonList() + '" download="data.csv"' ;
+//    window.location.assign(data);
+    window.open(data, 'Download');
 }
 var generateGraphSVG = function() {
     download(
@@ -1081,14 +1084,37 @@ var importGraphDetails = function() {
 
 var download = function(content, ext) {
 //    $("#download").attr("action", "http://115.146.84.185/search/download.php?ext=" + ext);
-    var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content)) + '" download="data.json"';
-    window.open(data)
+    var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content)) + '" download="data.json"' ;
+//    window.location.assign(data);
+
+//    window.open(data, 'Download');
 //    $('<a href="data:' + data + '" download="data.json">Ds</a>').appendTo('#mrw');
 
 /*
     $("#exportContent").val(content);
     $("#download").submit();
     */
+
+
+    mime_type = "text/plain";
+
+    var blob = new Blob([data], {type: mime_type});
+
+    var dlink = document.createElement('a');
+    dlink.download = 'file.json';
+    dlink.href = window.URL.createObjectURL(data);
+    dlink.onclick = function(e) {
+        // revokeObjectURL needs a delay to work properly
+        var that = this;
+        setTimeout(function() {
+            window.URL.revokeObjectURL(that.href);
+        }, 1500);
+    };
+
+    dlink.click();
+    dlink.remove();
+
+
 }
 var showhideadvanced = function(button) {
     if ($("#advanced_options").data("shown") != true) {
@@ -1304,7 +1330,7 @@ $(document).ready(function() {
         $(this).data("original", $(this).html());
     });
     
-    // querycutoffelem hadling
+    // querycutoffelem handling
     $(queryCutoffElem).bind("keyup", function() {
         var that = this;
         console.log($(this).val());

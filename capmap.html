@@ -8,8 +8,9 @@
 
      <link rel="stylesheet" href="complete.css">
 
-        <link rel="stylesheet" href="edit.css">
-        <link rel="stylesheet" href="screen.css">
+            <!-- Not sure what the following 2 css files were used for -->
+        <!--link rel="stylesheet" href="edit.css"-->
+        <!--link rel="stylesheet" href="screen.css"-->
         <link rel="stylesheet" href="custom2.css">
         <link  rel="stylesheet" type="text/css" href="graph.css">
 
@@ -122,8 +123,9 @@
                                <datalist id="rtopiclist">
                                     <select style="display:none;"></select>
                                </datalist>
-                               <label id="cutofflabel" for="queryCutoff">Cutoff:</label>
-                               <input id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="100">
+                               <!-- hide cutoff for now -->
+                               <label style="visibility: hidden" id="cutofflabel" for="queryCutoff">Cutoff:</label>
+                               <input style="visibility: hidden" id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="10000" >
                                <input type="submit" value="Search" id="add" type="button" onclick="addKwd();">
                                <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
 
@@ -176,7 +178,7 @@
                             <div id="right-container">
                                 <div class="tabs">  
                                     <ul  class="titles">
-                                        <li><a href="#demo">Search terms</a></li>
+                                        <li><a href="#demo">Terms</a></li>
                                         <li><a href="#logg">Info</a></li>
                                         <li><a href="#extractData">Data</a></li>
                                         <li><a href="#feedback">Feedback</a></li>
@@ -215,10 +217,10 @@
                                                 <button onclick="importGraphDetails();">JSON</button>
                                             <br>
                                                 Export:
-                                                <button onclick="generateGraphSVG();">SVG</button>
+                                                <!--button onclick="generateGraphSVG();">SVG</button-->
                                                 <button onclick="download(g.export(), 'json')">JSON</button>
-                                                <button onclick="download(g.toDOT(), 'gv')">DOT</button>
-                                                <button id="mrw" onclick="generateGraphPersonList()">MRW</button>
+                                                <!--button onclick="download(g.toDOT(), 'gv')">DOT</button-->
+                                                <button id="mrw" onclick="generateGraphPersonList()">CSV</button>
                                             </p>
                                             <textarea id="graphDetails" style="width:99%; height:450px; border:1px solid #EEE; padding:0px;"></textarea>
                                             <p style="position:absolute; bottom:10px">
@@ -227,7 +229,8 @@
                                         </div>
 
                                         <div class="result_section" id="feedback">
-                                            <form action="MAILTO:vivo@colorado.edu" method="post" enctype="text/plain">
+                                            <h2>We would love to hear your suggestions for this page</h2>
+                                            <form action="MAILTO:vivo@colorado.edu?subject=Expert Map Feedback" method="post" enctype="text/plain">
                                                 Name:<br>
                                                 <input type="text" name="name" value=""><br>
                                                 E-mail:<br>
