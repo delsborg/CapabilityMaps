@@ -122,6 +122,7 @@
         <div class="panel" id="HelpPanel">
             <h3>Help/Feedback</h3>
             <p>Help text and help images</p>
+            <img src="key.png" alt="Key">
 
             <div style="clear:both;"></div>
             <div class="columns"> </div>
@@ -249,9 +250,9 @@
                                             <br>
                                                 Export:
                                                 <!--button onclick="generateGraphSVG();">SVG</button-->
-                                                <button onclick="download(g.export(), 'json')">JSON</button>
+                                                <button id="json" onclick="download(g.export(), 'cuexperts.json')">JSON</button>
+                                                <button id="csv" onclick="download(g.toPersonList(), 'cuexperts.csv')">CSV</button>
                                                 <!--button onclick="download(g.toDOT(), 'gv')">DOT</button-->
-                                                <button id="mrw" onclick="generateGraphPersonList()">CSV</button>
                                             </p>
                                             <textarea id="graphDetails" style="width:99%; height:450px; border:1px solid #EEE; padding:0px;"></textarea>
                                             <p style="position:absolute; bottom:10px">

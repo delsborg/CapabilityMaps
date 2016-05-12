@@ -351,7 +351,7 @@ a:focus {
 .panel {
     position: relative;
     display: none;
-    background: #000000;
+    background: #85b0fe;
     border:1px solid #111111;
     -moz-border-radius-topright: 20px;
     -webkit-border-top-right-radius: 20px;
@@ -361,7 +361,7 @@ a:focus {
     height: auto;
     padding: 30px 30px 30px 130px;
     filter: alpha(opacity=85);
-    opacity: .85;
+    opacity: .9;
 }
 
 .panel p{

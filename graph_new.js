@@ -336,11 +336,11 @@ Graph.prototype.export = function() {
     });
 }
 Graph.prototype.toPersonList = function() {
-    var list = "Name|Email|VIVO URL\r\n";
+    var list = "Name,Email,VIVO URL\r\n";
 
     $.each(this.people, function(id, person) {
         var array = typeof person.info._source != 'object' ? JSON.parse(person.info._source) : person.info._source;
-         list += person.info._source.name + "|" + person.info._source.email[0] + "|" + person.info._source.uri + "\r\n";
+         list += '"' + person.info._source.name + '","' + person.info._source.email[0] + '","' + person.info._source.uri + '"\r\n';
     });
     return list;
 }
@@ -423,7 +423,6 @@ DetailsPanel.prototype.clearDetails = function() {
 }
 DetailsPanel.prototype.showDetails = function(mode, id) {
     showPanel("logg");
-    
     var that = this;
     var departments = {};
     var deptNames = [];
@@ -1062,12 +1061,21 @@ var unhighlight = function() {
     });
 }
 
+
+/* deprecated --- handling this via html and the download function
 var generateGraphPersonList = function() {
   //  var data = "data:text/csv;charset=utf-8," + $("#graphDetails").attr("value", g.toPersonList()) + '" download="data.csv"' ;
-    var data = "data:text/csv;charset=utf-8," +  g.toPersonList() + '" download="data.csv"' ;
+//    var data = "data:text/csv;charset=utf-8," +  g.toPersonList() + '" download="data.csv"' ;
+    var data = encodeURIComponent(g.toPersonList());
+    var link = document.createElement('a');
+    link.download = 'cuexpertlist.csv';
+    link.href = 'data:,' + data;
+    link.click();
 //    window.location.assign(data);
-    window.open(data, 'Download');
+//    window.open('data:Application/octet-stream,' + data, 'download=z.csv');
+//    return data;
 }
+*/
 var generateGraphSVG = function() {
     download(
         "<?xml version=\"1.0\" standalone=\"no\"?>\n" + 
@@ -1082,40 +1090,14 @@ var importGraphDetails = function() {
 }
 
 
-var download = function(content, ext) {
-//    $("#download").attr("action", "http://115.146.84.185/search/download.php?ext=" + ext);
-    var data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(content)) + '" download="data.json"' ;
-//    window.location.assign(data);
-
-//    window.open(data, 'Download');
-//    $('<a href="data:' + data + '" download="data.json">Ds</a>').appendTo('#mrw');
-
-/*
-    $("#exportContent").val(content);
-    $("#download").submit();
-    */
-
-
-    mime_type = "text/plain";
-
-    var blob = new Blob([data], {type: mime_type});
-
-    var dlink = document.createElement('a');
-    dlink.download = 'file.json';
-    dlink.href = window.URL.createObjectURL(data);
-    dlink.onclick = function(e) {
-        // revokeObjectURL needs a delay to work properly
-        var that = this;
-        setTimeout(function() {
-            window.URL.revokeObjectURL(that.href);
-        }, 1500);
-    };
-
-    dlink.click();
-    dlink.remove();
-
-
+var download = function(content, filename) {
+    var data = encodeURIComponent(content);
+    var link = document.createElement('a');
+    link.download = filename;
+    link.href = 'data:,' + data;
+    link.click();
 }
+
 var showhideadvanced = function(button) {
     if ($("#advanced_options").data("shown") != true) {
         $("#advanced_options").slideDown();
