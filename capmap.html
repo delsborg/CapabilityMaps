@@ -73,6 +73,17 @@
     var template = Handlebars.compile(source);
     </script>
 
+        <!-- following script is for side panels -->
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".trigger").click(function(){
+                    $(".panel").toggle("fast");
+                    $(this).toggleClass("active");
+                    return false;
+                });
+            });
+        </script>
+
 
         <style>
             .button {
@@ -103,8 +114,28 @@
 
     </head>
     
-    <body style="padding-top:10px">
-        <div class="wrapper">
+    <body>
+
+
+    <!-- side panel div coe -->
+    <div id="leftpanelcontainer">
+        <div class="panel" id="HelpPanel">
+            <h3>Help/Feedback</h3>
+            <p>Help text and help images</p>
+
+            <div style="clear:both;"></div>
+            <div class="columns"> </div>
+            <div style="clear:both;"></div>
+
+        </div>
+        <a class="trigger" href="#HelpPanel">Help</a>
+
+    </div>
+    <!-- end side panel div code -->
+
+
+
+    <div class="wrapper">
             <div id="wrapper-content" role="main">        
                 <div class="main" id="main-content" role="main">
                     <div class="col-8">
@@ -191,7 +222,7 @@
                                                 <li>This panel displays a list of the search terms currently
                                                 on the graph. Search for something to begin.</li>
                                             </ul>
-                                            <h2>Potential Associated Research Terms - Choose some to add to the graph</h2>
+                                            <h2>Associated Research Terms - Choose some to add to the graph</h2>
                                             <ul id="other_terms">
                                                 <li>This panel displays a list of the search terms associated with other researchers
                                                 on the graph. Search for something to begin.</li>
@@ -230,13 +261,11 @@
 
                                         <div class="result_section" id="feedback">
                                             <h2>We would love to hear your suggestions for this page</h2>
-                                            <form action="MAILTO:vivo@colorado.edu?subject=Expert Map Feedback" method="post" enctype="text/plain">
+                                            <form action="MAILTO:vivo@colorado.edu?subject=Expert Map Feedback&body=Hi,I found this website" method="post" enctype="text/plain">
                                                 Name:<br>
                                                 <input type="text" name="name" value=""><br>
-                                                E-mail:<br>
-                                                <input type="text" name="mail" value=""><br>
                                                 Comment:<br>
-                                                <input type="text" name="comment" value="" size="50"><br><br>
+                                                <input type="text" name="Tell us what you would like to see? How are you using the Expert Map" value="" size="50"><br><br>
                                                 <input type="submit" value="Send">
                                                 <input type="reset" value="Reset">
                                             </form>

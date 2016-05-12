@@ -53,6 +53,7 @@ body {
 }
 
 #right-container {
+    box-shadow: 0px 0px 20px -6px #000000;
     right:0;
     border-left:1px solid #ddd;
 }
@@ -333,4 +334,98 @@ footer {
 footer p.copyright {
     margin-left:0px;
     padding-left:0px;
+}
+
+/****************** dre 4/23/13 added to support side panel *********************/
+#leftpanelcontainer {
+    position: absolute;
+    top: 400px;
+    left: 0;
+    z-index: 100;
+}
+
+a:focus {
+    outline: none;
+}
+
+.panel {
+    position: relative;
+    display: none;
+    background: #000000;
+    border:1px solid #111111;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    width: 330px;
+    height: auto;
+    padding: 30px 30px 30px 130px;
+    filter: alpha(opacity=85);
+    opacity: .85;
+}
+
+.panel p{
+    margin: 0 0 15px 0;
+    padding: 0;
+    color: #cccccc;
+}
+
+.panel a, .panel a:visited{
+    margin: 0;
+    padding: 0;
+    color: #9FC54E;
+    text-decoration: none;
+    border-bottom: 1px solid #9FC54E;
+}
+
+.panel a:hover, .panel a:visited:hover{
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px solid #ffffff;
+}
+
+a.trigger{
+    text-decoration: none;
+    top: 80px; left: 0;
+    font-size: 16px;
+    letter-spacing:-1px;
+    font-family: verdana, helvetica, arial, sans-serif;
+    color:#fff;
+    padding: 20px 40px 20px 15px;
+    font-weight: 700;
+    background:#333333 url(plus.png) 85% 55% no-repeat;
+    border:1px solid #444444;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    display: block;
+}
+
+a.trigger:hover{
+    text-decoration: none;
+    top: 80px; left: 0;
+    font-size: 16px;
+    letter-spacing:-1px;
+    font-family: verdana, helvetica, arial, sans-serif;
+    color:#fff;
+    padding: 20px 40px 20px 20px;
+    font-weight: 700;
+    background:#222222 url(plus.png) 85% 55% no-repeat;
+    border:1px solid #444444;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    display: block;
+}
+
+a.active.trigger {
+    background:#222222 url(minus.png) 85% 55% no-repeat;
 }
