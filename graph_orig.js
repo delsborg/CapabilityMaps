@@ -1,4 +1,7 @@
 /**
+ * Created by elsborg on 5/16/2016.
+ */
+/**
  * Global variables
  */
 var g; // global graph variable
@@ -63,8 +66,11 @@ var Capability = function(term, cutoff, numpeople) {
  * An individual person and their information.
  */
 var Person = function(info) {
-    this.id = info["_id"];
+    this.id = info["md_1"];
     this.info = info;
+    this.info["md_Z"] = this.info["md_Z"].replace(/^.*\|/g, ""); // stop things like "PROFTAYLOR|PROF"
+    this.info["md_A"] = this.info["md_A"].replace(/<\/?strong>/g, "");
+    this.info["md_B"] = this.info["md_B"].replace(/<\/?strong>/g, "");
     this.fullInfo = {};
 }
 Person.prototype.fullname = function() {
@@ -98,7 +104,7 @@ Group.prototype.merge = function(capability, people) {
 /**
  * Removes a person from the group. Will destroy the group if the last person is removed.
  */
-Group.prototype.removePerson = function(person) { 
+Group.prototype.removePerson = function(person) {
     this.people = this.people.filter(function(a) {
         return (a != person && a.id != person.id);
     });
@@ -118,30 +124,25 @@ var Graph = function() {
     this.groups = [];
     this.people = {};
 }
-
 Graph.prototype.addGroup = function(g) {
     this.groups.push(g);
 }
-
 Graph.prototype.createPerson = function(info) {
-    if (info["_id"] in this.people) return this.people[info["_id"]];
+    if (info["md_1"] in this.people) return this.people[info["md_1"]];
     var p = new Person(info);
     this.people[p.id] = p;
     return p;
 }
-
 Graph.prototype.addCapability = function(c, people) {
     if ((people = this.groups.reduce(function(ps, group) {
-        return group.merge(c, ps);
-    }, people)).length) this.groups.push(new Group(this, [c], people));
+            return group.merge(c, ps);
+        }, people)).length) this.groups.push(new Group(this, [c], people));
 }
-
 Graph.prototype.hasCapability = function(term) {
     return this.getCapabilities().reduce(function(acc, v) {
         return acc || v.term == term;
     }, false);
 }
-
 Graph.prototype.getCapabilities = function() {
     return this.groups.reduce(function(capabilities, group) {
         return capabilities.concat(group.capabilities.reduce(function(cs, c) {
@@ -150,49 +151,6 @@ Graph.prototype.getCapabilities = function() {
         }, []));
     }, []);
 }
-
-Graph.prototype.getAllCapabilities = function(g) {
-   var reIds = {};
-   var z = {};
-    var x = {};
-    var a = [];
-
-    function topic(rname, count) {
-        this.name = rname;
-        this.count = count;
-    }
-    var rtopic = topic;
-
-   var term = $('#query').val();
-   $.each(g.people, function(k,v) {  
-       $.each(v.info._source.researchArea, 
-          function(k,v) {
-              var cnt = 0;
-              $.each(g.capabilities, function(ck,cv){
-                  if (cv.term == v.name.valueOf() ) {cnt = 1;}
-              });
-              if (cnt == 0 )
-              {
-                 if (!reIds[v.name]) {reIds[v.name] = 0;}
-                 reIds[v.name]++;
-              }
-        });
-   } );
-   var finalRet = Object.keys(reIds).sort(function(a,b) { return reIds[b]-reIds[a]}); 
-//   console.log(finalRet);
-   $.each(finalRet, function(x,y) {
-//       console.log(x);
- //      console.log(y);
-             z[y] = reIds[y];
-       rtopic.rname=y;
-       rtopic.count=reIds[y];
-       a.push({rname: y, count: reIds[y]});
-    });
-//return (finalRet,reIds);
-//   return finalRet;
-return a;
-}
-
 Graph.prototype.removeGroup = function(group) {
     var that = this;
     $.each(group.people, function(key, person) { delete that.people[person.id]; });
@@ -209,7 +167,7 @@ Graph.prototype.removeCapability = function(term) {
             var cs = {};
             var shifted = false;
             $.each(g.groups[i].capabilities, function(key, c) {
-                cs[c.term] = c;                
+                cs[c.term] = c;
             });
             consideringGroups: for (var j = 0; j < g.groups.length; j++) {
                 if (j == i) continue;
@@ -246,7 +204,6 @@ Graph.prototype.toDOT = function() {
     });
     return "graph G {\n" + nodes + edges + "}\n";
 }
-
 Graph.prototype.tod3 = function() {
     var d3_graph = {"nodes" : [], "labelAnchors" : [], "labelAnchorLinks" : [], "links" : []};
     $.each(g.groups, function(i, group) {
@@ -304,12 +261,12 @@ Graph.prototype.tod3 = function() {
         var k = d3_graph.labelAnchors[i * 2]["node"]["identifier"];// + " " + d3_graph.labelAnchors[i * 2 + 1]["node"]["label"];
         console.log(k);
         if (!labelAnchorLinkDict[k]) labelAnchorLinkDict[k] =
-            {
-                "uid" : Math.random(),
-                source : d3_graph.labelAnchors[i * 2],
-                target : d3_graph.labelAnchors[i * 2 + 1],
-                weight : 1
-            };
+        {
+            "uid" : Math.random(),
+            source : d3_graph.labelAnchors[i * 2],
+            target : d3_graph.labelAnchors[i * 2 + 1],
+            weight : 1
+        };
         else {
             labelAnchorLinkDict[k]["source"] = d3_graph.labelAnchors[i * 2];
             labelAnchorLinkDict[k]["target"] = d3_graph.labelAnchors[i * 2 + 1];
@@ -337,11 +294,9 @@ Graph.prototype.export = function() {
     });
 }
 Graph.prototype.toPersonList = function() {
-    var list = "Name,Email,VIVO URL\r\n";
-
+    var list = "";
     $.each(this.people, function(id, person) {
-        var array = typeof person.info._source != 'object' ? JSON.parse(person.info._source) : person.info._source;
-         list += '"' + person.info._source.name + '","' + person.info._source.email[0] + '","' + person.info._source.uri + '"\r\n';
+        list += person.info["md_1"] + "|";
     });
     return list;
 }
@@ -399,13 +354,11 @@ var FullResultQueryUnit = function(capabilities, person) {
 FullResultQueryUnit.prototype.fetch = function() {
     var query = this.person.queryText(this.capabilities);
     query = encodeURI(query);
-//    var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&&topic.max_clusters=40&form=faeJSON&query=" + query + "&num_ranks=1&callback=ipretFullResults"
-//    var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&&topic.max_clusters=40&form=faeJSON&query=" + query + "&num_ranks=1&callback=ipretFullResults"
-    var res1 = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&&topic.max_clusters=40&form=faeJSON&query=" + query + "&num_ranks=1&callback=ipretFullResults"
+    var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&&topic.max_clusters=40&form=faeJSON&query=" + query + "&num_ranks=1&callback=ipretFullResults"
     var request = new JSONscriptRequest(jsonurl);
     request.buildScriptTag();
     request.addScriptTag();
-} 
+}
 
 var showPanel = function(name) {
     $(".titles li").removeClass("activeTab");
@@ -417,13 +370,14 @@ var showPanel = function(name) {
  * The DetailsPanel prototype controls the display of information in the sidebar.
  */
 var DetailsPanel = function(element) {
-    this.panel = element;   
+    this.panel = element;
 }
 DetailsPanel.prototype.clearDetails = function() {
     $(this.panel).empty();
 }
 DetailsPanel.prototype.showDetails = function(mode, id) {
     showPanel("logg");
+
     var that = this;
     var departments = {};
     var deptNames = [];
@@ -437,186 +391,137 @@ DetailsPanel.prototype.showDetails = function(mode, id) {
                 })
                 .css("cursor", "pointer")
                 .prepend($("<span/>").addClass("orange-square"))
-            )
+        )
             .append($("<button>Remove capability</button>")
                 .bind("click", function() {
                     g.removeCapability(id);
                     that.clearDetails();
                     render();
                 })
-            )
+        )
             .append($("<span> </span>"))
-
-	    .append(
-                g.groups.reduce(function(div, group, i) {
-                    if (group.capabilities.map(function(c) { return c.term; }).indexOf(id) != -1) {
-
-
-                        $.each(group.people, function(key, person) {
-                           $.each(person.info._source.organization, function(k,i) {
-                               if (!departments[i.name]) {
-                    	        departments[i.name] = 0;
-                                    deptNames.push(i.name);
-	                       }
-	                     departments[i.name]++;
-                           });
+            .append($("<button>Expand</button>")
+                .bind("click", function() {
+                    expandLastQuery = 1;
+                    addKwd(decodeURIComponent(id));
+                })
+        ).append(
+            g.groups.reduce(function(div, group, i) {
+                if (group.capabilities.map(function(c) { return c.term; }).indexOf(id) != -1) {
+                    $.each(group.people, function(key, person) {
+                        person.info["md_4"].split("|").forEach(function(i) {
+                            if (!departments[i]) {
+                                departments[i] = 0;
+                                deptNames.push(i);
+                            }
+                            departments[i]++;
                         });
-
-                        return div.append(that.groupInfo(i, group, mode, id));
-                    } else return div;
-                }, $("<div/>"))
-            );
-            title.after(DetailsPanel.makebarchart(deptNames, departments));
-    } else {
-          $(this.panel).empty().append(this.groupInfo(id, g.groups[id], mode, id));
-
-        // Remove all previous other terms -- clear that list out
-        d3.select('#other_terms').selectAll("li").remove();
-        //Now add the terms
-        $.each(g.getAllCapabilities(g.groups[id]), function(i, c) {
-           $("#other_terms").append($("<li/>")
-               .append($('<button class="button button1">' + "<a> " + c.rname + ": " + c.count + "</a></button>")
-  //                 .append($("<a> " + c.rname + ": " + c.count + "</a>")
-                    .bind("click", function() {
-                           $('#query').val(c.rname );
-                           addKwd();
-                           /*
-                        highlight(c.rname);
-                        detailsPane.showDetails("capability", c.rname);
-                           */
-                    })
-                    .css("cursor", "pointer")
-                )
-            );
-       });
-
-  /*    Attempting to create the checkboxes with D3 -- problem is that the checkbox input is appended to the label. I need it prepended
-        d3.select('#other_terms').selectAll("li").remove();
-        var allcaps=g.getAllCapabilities(g.groups[id]);
-        var otherlist=d3.select('#other_terms').selectAll("li").data(allcaps);
-        //var otherlist=d3.select('#other_terms').selectAll("li").data(g.groups[id].people[0].info._source.researchArea);
-        otherlist.exit().remove();
-        otherlist.enter().append("li")
-            .append('label')
-            .text(function (d){
-                return d.rname + ": " + d.count;
-            })
-            .append("input")
-                .attr("checked", false)
-                .attr("type", "checkbox")
-                .attr("id", function(d,i) { return 'a'+i; })
-                .attr("onClick", "change(this)")
-            ;
-
- */
-
-       }
-} 
+                    });
+                    return div.append(that.groupInfo(i, group, mode, id));
+                } else return div;
+            }, $("<div/>"))
+        );
+        title.after(DetailsPanel.makebarchart(deptNames, departments));
+    } else $(this.panel).empty().append(this.groupInfo(id, g.groups[id], mode, id));
+}
 DetailsPanel.prototype.groupInfo = function(i, group, mode, id) {
     var that = this;
     var departments = {};
     var deptNames = [];
-    var deptURI = [];
     $.each(group.people, function(key, person) {
-       $.each(person.info._source.organization, function(k,i) {
-           if (!departments[i.name]) {
-	        departments[i.name] = 0;
-                deptNames.push(i.name);
-                deptURI.push(i.uri);
-	   }
-	 departments[i.name]++;
-       });
+        person.info["md_4"].split("|").forEach(function(i) {
+            if (!departments[i]) {
+                departments[i] = 0;
+                deptNames.push(i);
+            }
+            departments[i]++;
+        });
     });
     return $("<div/>")
         .append(
-            $("<h2>" + "Group: " + group.capabilities.map(function(c) {
+        $("<h2>" + "Group: " + group.capabilities.map(function(c) {
                 return decodeURIComponent(c.term);
             }).join(", ") + "</h2>")
-                .bind("click", function() {
-                    highlight(i);
-                })
-                .css("cursor", "pointer")
-                .prepend($("<span/>").addClass("blue-circle"))
-        )
+            .bind("click", function() {
+                highlight(i);
+            })
+            .css("cursor", "pointer")
+            .prepend($("<span/>").addClass("blue-circle"))
+    )
         .append($("<button>Remove group</button>")
             .bind("click", function() {
                 g.removeGroup(group);
                 that.clearDetails();
                 render();
             })
-        )
+    )
         .append(DetailsPanel.makebarchart(deptNames, departments))
         .append(
-            group.people.reduce(function(div, p, i) {
-                return div
-                    .append($("<div>")
-                        .addClass("person_details")
-                        .append(!p.info._source.name ? $("<span/>") : ($("<img/>")
-                            .attr("src", p.info._source.thumbnail)
-//                            .attr("width", 50)
- //                           .css({"float" : "right", "margin-top" : "10px", "clear" : "both"})
-                        )
-                        )
-                        .append($("<h3/>")
-                            .css({"clear" : "none"})
-                            .append($("<a>" + p.info._source.name + "</a>")
-                                .attr("href", p.info._source.uri)
-                                .attr("target", "_blank")
-                            )
-                            .append($("<span> </span>"))
-                            .append($("<a>[X]</a>")
-                                .css("cursor", "pointer")
-                                .bind("click", function(k) {
-                                    return function() {
-                                        group.removePerson(group.people[k]);
-                                        render();
-                                        that.showDetails(mode, id);
-                                    }
-                                }(i))
-                            )
-                        )
-                 //       .append($("<p>" + p.info["md_4"].replace(/\|/g, " / ") + "</p>").css("font-style", "italic"))
-                        .append($("<a>" + p.info._source.organization[0].name +"</a>").css("font-style", "italic")
-                                .attr("href", p.info._source.organization[0].uri)
-                                .attr("target", "_blank")
-	                )
-                        .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_8"], "grants"))
-                        .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_U"], "publications"))
-
-                        
-                        
+        group.people.reduce(function(div, p, i) {
+            return div
+                .append($("<div>")
+                    .addClass("person_details")
+                    .append(!p.info["md_3"] ? $("<span/>") : ($("<img/>")
+                        .attr("src", "http://findanexpert.unimelb.edu.au" + p.info["md_3"])
+                        .attr("width", 50)
+                        .css({"float" : "right", "margin-top" : "10px", "clear" : "both"}))
+                )
+                    .append($("<h3/>")
+                        .css({"clear" : "none"})
+                        .append($("<a>" + p.fullname() + "</a>")
+                            .attr("href", "http://search-au.funnelback.com/s/search.html?query=" + encodeURI(p.queryText(group.capabilities)) + "&collection=unimelb-researchers&referrer=www.findanexpert.unimelb.edu.au")
+                            .attr("target", "_blank")
                     )
-                
-            }, $("<div/>"))
-        );
+                        .append($("<span> </span>"))
+                        .append($("<a>[X]</a>")
+                            .css("cursor", "pointer")
+                            .bind("click", function(k) {
+                                return function() {
+                                    group.removePerson(group.people[k]);
+                                    render();
+                                    that.showDetails(mode, id);
+                                }
+                            }(i))
+                    )
+                )
+                    .append($("<p>" + p.info["md_4"].replace(/\|/g, " / ") + "</p>").css("font-style", "italic"))
+                    .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_8"], "grants"))
+                    .append(DetailsPanel.makeslidedown(p.queryText(group.capabilities), p.fullInfo["md_U"], "publications"))
+
+
+
+            )
+
+        }, $("<div/>"))
+    );
 }
 DetailsPanel.makeslidedown = function(q, l, name) {
     return l != undefined
         ? $("<p>Matching " + name + ": " + l.length + " </p>")
-            .append($("<button>+</button>")
-                .bind("click", function() {
-                    if ($(this).html() == "+") {
-                        $(this).parent().children("ul").slideDown();
-                        $(this).html("-");
-                    } else {
-                        $(this).parent().children("ul").slideUp();
-                        $(this).html("+");
-                    }
-                })
+        .append($("<button>+</button>")
+            .bind("click", function() {
+                if ($(this).html() == "+") {
+                    $(this).parent().children("ul").slideDown();
+                    $(this).html("-");
+                } else {
+                    $(this).parent().children("ul").slideUp();
+                    $(this).html("+");
+                }
+            })
+    )
+        .append((l || []).slice(0, 5).reduce(function(list, grant) {
+            return list.append($("<li>" + grant + "</li>"));
+        }, $("<ul/>")
+            .addClass("publist").css("display", "none"))
+            .append(l.length > 5
+                ? $("<li/>").append(
+                $("<a>(view more)</a>")
+                    .attr("href", "http://search-au.funnelback.com/s/search.html?query=" + encodeURI(q) + "&collection=unimelb-researchers&referrer=www.findanexpert.unimelb.edu.au")
+                    .attr("target", "_blank")
             )
-            .append((l || []).slice(0, 5).reduce(function(list, grant) {
-                return list.append($("<li>" + grant + "</li>"));
-            }, $("<ul/>")
-                .addClass("publist").css("display", "none"))
-                .append(l.length > 5 
-                    ? $("<li/>").append(
-                        $("<a>(view more)</a>")
-//                        .attr("href", "http://search-au.funnelback.com/s/search.html?query=" + encodeURI(q) + "&collection=unimelb-researchers&referrer=www.findanexpert.unimelb.edu.au")
-                        .attr("target", "_blank")
-                    )
-                    : ""
-                )
-            )
+                : ""
+        )
+    )
         : null
 }
 DetailsPanel.makebarchart = function(deptNames, departments) {
@@ -630,50 +535,45 @@ DetailsPanel.makebarchart = function(deptNames, departments) {
             .append($("<span/>")
                 .addClass("bar")
                 .css({"width" : percent + "%", "margin-right" : "-" + percent + "%"})
-            )
+        )
             .append($("<strong>" + i.replace(/<\/?strong>/g, "").substr(0,37) + (i.replace(/<\/?strong>/g, "").length > 37 ? "&hellip;" : "") + ": </strong>")
                 .attr("title", i)
-            )
+        )
             .append($("<span>" + departments[i] + "</span>"))
             .append($("<br/>"));
     });
     return div;
 };
-            
+
 var loadCapability = function() {
     if (hidden) unhide();
     if (!queryQueue.length) finish();
     else {
         disableSubButton();
         var query = queryQueue.pop();
-        var res;
-        var jsonurl = "https://vivo.colorado.edu/es/fis/person/_search?q=researchArea.name:%22" + encodeURIComponent(query) + "%22&size=500&callback=ipretResults";
+        var jsonurl = "http://search-au.funnelback.com/s/search.html?collection=unimelb-researchers&type.max_clusters=40&topic.max_clusters=40&form=faeJSONatom&query=" + encodeURIComponent(query) + "&num_ranks=1000&callback=ipretResults"
         var request = new JSONscriptRequest(jsonurl);
         request.buildScriptTag();
         request.addScriptTag();
     }
 }
 var addKwd = function(kwd) {
-    queryElem.value = capitalizeWords(queryElem.value);
     if (kwd !== false) {
         if (!kwd) window.location.hash = encodeURI(queryElem.value + "|" + queryCutoffElem.value + "|" + expandLastQuery);
         queryQueue.push(kwd || queryElem.value);
     }
-    $('#query').val(queryElem.value);
     loadCapability();
 }
-var ipretResults = function(results,query) {
-    console.log(query);
-    console.log(results);
-    var resultlist = results.hits["hits"];
-    if (!resultlist.length || resultlist[0]["_id"] === undefined) enableSubButton();
+var ipretResults = function(results) {
+    var resultlist = results["results"];
+    if (!resultlist.length || resultlist[0]["md_1"] === undefined) enableSubButton();
     else {
-        var term = $('#query').val();
+        var term = resultlist[0]["query"];
         if (!g.hasCapability(term)) {
             var c = new Capability(term, queryCutoffElem.value, resultlist.length);
             var people = [];
             for (var i = 0; i < Math.min(queryCutoffElem.value, resultlist.length); i++) {
-                if (resultlist[i]["_id"] == undefined) continue;
+                if (resultlist[i]["md_1"] == undefined) continue;
                 var person = g.createPerson(resultlist[i]);
                 people.push(person);
                 updatedPeople.push(person.id);
@@ -722,15 +622,13 @@ var render = function() {
     }
     if (!delta) {
         var outer = d3.select("#infovis").append("svg:svg").attr("width", w).attr("height", h);
-        var rescale = function () {
-            vis.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
-        }
+        var rescale = function() { vis.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")"); }
         vis = outer
             .append('svg:g')
             .call(d3.behavior.zoom().scaleExtent([1, 5]).on("zoom", rescale))
             .on("dblclick.zoom", null)
             .append("svg:g")
-            .on("mousedown", function () {
+            .on("mousedown", function() {
                 vis.call(d3.behavior.zoom().scaleExtent([1, 5]).on("zoom", rescale))
             });
         vis.append('svg:rect')
@@ -747,7 +645,7 @@ var render = function() {
             .gravity(parseInt($("#graph_gravity").val()))
             .charge(parseInt($("#graph_charge").val()))
             .linkDistance(parseInt($("#graph_linkdistance").val()))
-            .linkStrength(function (x) {
+            .linkStrength(function(x) {
                 return x.weight * 10
             });
 
@@ -768,22 +666,18 @@ var render = function() {
     force.start();
     force2.start();
 
-    link_data = edge_layer.selectAll("line.link").data(links, function (d) {
-        return d.uid;
-    });
+    link_data = edge_layer.selectAll("line.link").data(links, function(d) { return d.uid; });
     link_data.enter().append("svg:line")
         .attr("class", "link")
         .style("stroke", $("#linkColor").val())
         .style("stroke-opacity", ".6")
-        .style("stroke-width", function (d) {
+        .style("stroke-width", function(d) {
             return Math.sqrt(d.value) + 1;
         });
     link_data.exit().remove();
     link = edge_layer.selectAll("line.link");
 
-    var node_data = node_layer.selectAll("g.node").data(force.nodes(), function (d) {
-        return d.uid;
-    });
+    var node_data = node_layer.selectAll("g.node").data(force.nodes(), function(d) { return d.uid; });
     var node = node_data.enter().append("svg:g");
     console.log("nodes:");
     console.log(node);
@@ -791,26 +685,26 @@ var render = function() {
     node
         .attr("class", "node")
         .style("cursor", "pointer")
-        .on("click", function (d) {
+        .on("click", function(d) {
             highlight(d.identifier);
             detailsPane.showDetails(d.nodetype, d.identifier);
         })
-        .on("touchstart", function (d) {
+        .on("touchstart", function(d) {
             highlight(d.identifier);
             detailsPane.showDetails(d.nodetype, d.identifier);
         })
         .style("stroke", scheme["nodestroke"])
         .style("stroke-width", 2)
-        .each(function (d, i) {
+        .each(function(d, i) {
             d3.select(this).selectAll("*").remove();
             if (d.nodetype == "group") d3.select(this).append("svg:circle");
             else d3.select(this).append("svg:rect");
             if (d.nodetype == "group") {
                 d3.select(this).select("circle")
-                    .attr("r", function (d) {
+                    .attr("r", function(d) {
                         return 4 * d.value / queryCutoffElem.value + 4;
                     })
-                    .style("fill", function (d) {
+                    .style("fill", function(d) {
                         var p = (85 - Math.min(1, d.numcaps / 4) * 50);
                         var l = scheme["gradient"](p);
                         var c = "hsl(240, " + (85 - p) + "%, " + l + "%)";
@@ -828,14 +722,10 @@ var render = function() {
     node_data.exit().remove();
     node = d3.selectAll("g.node");
 
-    var anchorLink = label_layer.selectAll("line.anchorLink").data(labelAnchorLinks, function (d) {
-        return d.uid;
-    });
+    var anchorLink = label_layer.selectAll("line.anchorLink").data(labelAnchorLinks, function(d) { return d.uid; });
     anchorLink.exit().remove();
 
-    var anchor_data = label_layer.selectAll("g.anchorNode").data(force2.nodes(), function (d) {
-        return d.uid;
-    });
+    var anchor_data = label_layer.selectAll("g.anchorNode").data(force2.nodes(), function(d) { return d.uid; });
     var anchorNode = anchor_data.enter().append("svg:g").attr("class", "anchorNode");
     anchorNode.append("svg:circle").attr("r", 0).style("fill", "#FFF");
     anchorNode.append("svg:text")
@@ -843,52 +733,48 @@ var render = function() {
         .style("font-family", "Arial")
         .style("font-size", 10)
         .style("cursor", "pointer")
-        .style("font-weight", function (d) {
-            return d.node.nodetype == "group" ? "normal" : "bold"
-        })
-        .attr("class", function (d) {
-            return "label-" + d.node.nodetype
-        })
-        .style("text-shadow", function (d) {
+        .style("font-weight", function(d) { return d.node.nodetype == "group" ? "normal" : "bold"})
+        .attr("class", function(d) { return "label-" + d.node.nodetype })
+        .style("text-shadow", function(d) {
             return d.node.nodetype == "group" ? "none" :
             "2px 0px " + scheme["nodestroke"] +
             ", -2px 0px " + scheme["nodestroke"] +
             ", 0px 2px " + scheme["nodestroke"] +
             ", 0px -2px " + scheme["nodestroke"];
-        }).on("click", function (d) {
+        }).on("click", function(d) {
             highlight(d.node.identifier);
             detailsPane.showDetails(d.node.nodetype, d.node.identifier);
         });
-    label_layer.selectAll("g.anchorNode").each(function (d, i) {
+    label_layer.selectAll("g.anchorNode").each(function(d, i) {
         d3.select(this).select("text").text(i % 2 == 0 ? "" : d.node.label)
     });
     anchor_data.exit().remove();
     anchorNode = label_layer.selectAll("g.anchorNode");
 
-    var updateLink = function () {
-        this.attr("x1", function (d) {
+    var updateLink = function() {
+        this.attr("x1", function(d) {
             return d.source.x;
-        }).attr("y1", function (d) {
+        }).attr("y1", function(d) {
             return d.source.y;
-        }).attr("x2", function (d) {
+        }).attr("x2", function(d) {
             return d.target.x;
-        }).attr("y2", function (d) {
+        }).attr("y2", function(d) {
             return d.target.y;
         });
 
     }
-    var updateNode = function () {
-        this.attr("transform", function (d) {
+    var updateNode = function() {
+        this.attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         });
 
     }
-    force.on("tick", function () {
+    force.on("tick", function() {
         $("#log button:first-child").html("pause");
         force2.start();
         node.call(updateNode);
-        anchorNode.each(function (d, i) {
-            if (i % 2 == 0) {
+        anchorNode.each(function(d, i) {
+            if(i % 2 == 0) {
                 d.x = d.node.x;
                 d.y = d.node.y;
             } else {
@@ -910,7 +796,7 @@ var render = function() {
 
     // refresh UI
     $("#log").empty().append($("<button>pause</button>")
-            .bind("click", function () {
+            .bind("click", function() {
                 if ($(this).html() != "resume") {
                     $(this).html("resume");
                     force.stop();
@@ -922,7 +808,7 @@ var render = function() {
                 }
             })
     ).append(" ").append($("<button>hide group labels</button>")
-            .bind("click", function () {
+            .bind("click", function() {
                 if ($(this).html() != "show group labels") {
                     $(this).html("show group labels");
                     $(".label-group").css("visibility", "hidden");
@@ -932,45 +818,29 @@ var render = function() {
                 }
             })
     );
-
-
-    d3.select('#log_printout').selectAll("li").remove();
-    $.each(g.getCapabilities(), function (i, c) {
+    $("#log_printout").empty().append($("<button>Delete selected</button>").bind("click", function() {
+        $("input[type=checkbox]:checked").each(function() {
+            g.removeCapability($(this).attr("name"));
+            $(this).parent().remove();
+        });
+        render();
+    }));
+    $.each(g.getCapabilities(), function(i, c) {
         $("#log_printout")
             .append($("<li/>")
-                .append($('<button class="button button1">' + "<a> " + decodeURI(c.term) + "</a></button>")
-                    .bind("click", function () {
-                        g.removeCapability(c.term);
-                        render();
+                .append($("<a> " + decodeURI(c.term) + "</a>")
+                    .bind("click", function() {
+                        highlight(c.term);
+                        detailsPane.showDetails("capability", c.term);
                     })
                     .css("cursor", "pointer")
             )
+                .prepend($("<input/>").attr("type", "checkbox")
+                    .attr("name", c.term)
+            )
         );
     });
-
-    // Remove all previous other terms -- clear that list out
-    d3.select('#other_terms').selectAll("li").remove();
-    //Now add the terms
-    $.each(g.getAllCapabilities(g.groups[0]), function (i, c) {
-        $("#other_terms")
-            .append($("<li/>")
-                .append($('<button class="button button1">' + "<a> " + c.rname + ": " + c.count + "</a></button>")
-                    .bind("click", function () {
-                        $('#query').val(c.rname);
-                        addKwd();
-                        /*
-                         highlight(c.rname);
-                         detailsPane.showDetails("capability", c.rname);
-                         */
-
-                    })
-                    .css("cursor", "pointer")
-            ));
-
-
-    });
 }
-
 var highlight = function(identifier) {
     unhighlight();
     d3.selectAll("g.node").each(function(d, i) {
@@ -1008,28 +878,26 @@ var unhighlight = function() {
     });
 }
 
+var generateGraphPersonList = function() {
+    $("#graphDetails").attr("value", g.toPersonList());
+}
 var generateGraphSVG = function() {
     download(
-        "<?xml version=\"1.0\" standalone=\"no\"?>\n" + 
-        "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" " +  
+        "<?xml version=\"1.0\" standalone=\"no\"?>\n" +
+        "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" " +
         "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
         $("#infovis").html().replace("<svg", "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"")
-    , "svg");
+        , "svg");
 }
 var importGraphDetails = function() {
     g = Graph.import($("#graphDetails").attr("value"));
     render();
 }
-
-
-var download = function(content, filename) {
-    var data = encodeURIComponent(content);
-    var link = document.createElement('a');
-    link.download = filename;
-    link.href = 'data:,' + data;
-    link.click();
+var download = function(content, ext) {
+    $("#download").attr("action", "http://115.146.84.185/search/download.php?ext=" + ext);
+    $("#exportContent").val(content);
+    $("#download").submit();
 }
-
 var showhideadvanced = function(button) {
     if ($("#advanced_options").data("shown") != true) {
         $("#advanced_options").slideDown();
@@ -1037,7 +905,7 @@ var showhideadvanced = function(button) {
         $(button).html("Hide advanced");
     } else {
         $("#advanced_options").slideUp();
-        $("#advanced_options").data("shown", false);        
+        $("#advanced_options").data("shown", false);
         $(button).html("Show advanced");
     }
 }
@@ -1053,7 +921,6 @@ var finish = function() {
     showPanel("demo");
     enableSubButton();
     fullResultsQueue = [];
-    /*
     $.each(g.groups, function(key, group) {
         $.each(group.people, function(key, person) {
             if (updatedPeople.indexOf(person.id) != -1)
@@ -1063,7 +930,6 @@ var finish = function() {
     updatedPeople = [];
     progressBar.reset(fullResultsQueue.length, 2);
     retrieveFullResults();
-    */
 }
 
 var retrieveFullResults = function() {
@@ -1084,7 +950,7 @@ var reset = function() {
         force = undefined;
         $("#infovis").html("");
         window.location.hash = "";
-        
+
         $("#log_printout").empty();
         detailsPane.clearDetails();
         $("#graphDetails").attr("value", "");
@@ -1098,13 +964,13 @@ var reset = function() {
         $("#helptext").fadeIn();
     }
     render();
-    
+
 }
 var unhide = function() {
     hidden = false;
     $("#resetButton").removeAttr("disabled");
     if ($(window).width() > 1230) {
-        $("#container").css( "0px 0px 20px -6px #000000");
+        $("#container").css("box-shadow", "0px 0px 20px -6px #000000");
         $("#container").animate({"height" : "600px", "width" : "1200px", "margin-left" : "-130px"}, 500);
         $("#center-container").css("width", "900px");
     } else {
@@ -1115,34 +981,9 @@ var unhide = function() {
     $("#center-container").fadeIn();
 }
 
-function capitalizeWords(str) {
-    str = str.toLowerCase();
-    //return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-        //if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
-        // return index == 0 ? match.toUpperCase() : match.toLowerCase();
-        return match.toUpperCase();
-        // urn index == 0 ?  match.toUpperCase();
-    });
-}
-
-function GetURLParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++)
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam)
-        {
-            return sParameterName[1];
-        }
-    }
-}
-
 function run_demo(demoValues) {
     demoValues.forEach(function(query) {
-        queryQueue.push(query); 
+        queryQueue.push(query);
     });
     progressBar.reset(demoValues.length, 1);
     addKwd(false);
@@ -1161,109 +1002,37 @@ var queryKeyDown = function(e) {
 
 $(document).ready(function() {
     // elements global variables
-
-    console.log('ready graph');
-
-    //check browser for HTML5 datalist
-    var nativedatalist = !!('list' in document.createElement('input')) &&
-        !!(document.createElement('datalist') && window.HTMLDataListElement);
-
-    // The JSON list url
-    var esurl = "https://vivo.colorado.edu/es/fis/person/_search?callback=?&source=";
-    var esdsl = {
-        "size": 0,
-        "aggs" : {
-            "researchAreas" : {
-                "terms" : {"field" : "researchArea.name.exact", "size": 0}
-            }
-        }
-    }
-
-    var esdslreq = "source=" + JSON.stringify(esdsl);
-
-    function createList(rtopics) {
-        // get the datalist element
-        var datalist = $("#rtopiclist select");
-        //   $('<select>').appendTo(datalist)
-        // Fill it with the rtopics array
-        for(var i=0; i < rtopics.length; i++){
-            $('<option value="'+rtopics[i]+'">' +rtopics[i]+'</option>').appendTo(datalist);
-        }
-        //  $('</select>').appendTo(datalist)
-
-// This next section is the polyfill for Safari
-        if (!nativedatalist) {
-            var availableTags = $('#rtopiclist').find('option').map(function () {
-                return this.value;
-            }).get();
-            $('#query').autocomplete({source: availableTags});
-        }
-
-    }
-
-
-    function loadDatas( callback ){
-
-        // Make the ajax call
-        $.getJSON(esurl, esdslreq, function(list){
-            // create the rtopics array
-            var rtopics =[];
-            var rbuckets=list.aggregations.researchAreas.buckets;
-            for(var i=0; i < rbuckets.length; i++){
-                rtopics.push(rbuckets[i].key);
-            }
-            // Call the function that will create the options
-            // But sort the array first (for better user experience)
-            callback(rtopics.sort());
-        });
-    }
-
-
-
-    // jQuery OnLoad ...
-    $(function(){
-
-        loadDatas( createList );
-        console.log('ready elastic_cap 2');
-
-    });
-
-
-
-
-
-
     subButton = document.getElementById('add');
     queryElem = document.getElementById('query');
     queryCutoffElem = document.getElementById('queryCutoff');
     detailsPane = new DetailsPanel('#inner-details');
     g = new Graph();
-    
+
     // results section text backup
     $(".result_section").each(function() {
         $(this).data("original", $(this).html());
     });
-    
-    // querycutoffelem handling
+
+    // querycutoffelem hadling
     $(queryCutoffElem).bind("keyup", function() {
         var that = this;
         console.log($(this).val());
         if ($(this).data("prev") != $(this).val() && $("#infovis").html() != "") {
             $("#cutofflabel").empty().append($("<img/>")
-                .attr("src", "refresh.png")
-                .bind("click", function() {
-                    $.each(g.getCapabilities(), function(i, c) {
-                        if (c.cutoff != queryCutoffElem.value) {
-                            g.removeCapability(c.term);
-                            queryQueue.push(decodeURI(c.term));
-                        }
-                    });
-                    $(this).unbind("click");
-                    $(this).parent().html("Cutoff:");
-                    progressBar.reset(queryQueue.length, 1);
-                    addKwd(false);
-                    return false;
-                })
+                    .attr("src", "refresh.png")
+                    .bind("click", function() {
+                        $.each(g.getCapabilities(), function(i, c) {
+                            if (c.cutoff != queryCutoffElem.value) {
+                                g.removeCapability(c.term);
+                                queryQueue.push(decodeURI(c.term));
+                            }
+                        });
+                        $(this).unbind("click");
+                        $(this).parent().html("Cutoff:");
+                        progressBar.reset(queryQueue.length, 1);
+                        addKwd(false);
+                        return false;
+                    })
             );
             setTimeout(function() {
                 $("#cutofflabel img").unbind("click");
@@ -1273,25 +1042,16 @@ $(document).ready(function() {
         $(this).data("prev", $(this).val());
     });
     $(queryCutoffElem).data("prev", $(queryCutoffElem).val());
-    
+
     // URL hash reading
     if (window.location.hash != "") {
         var preset = decodeURI(window.location.hash).slice(1).split("|");
-        queryElem.value = capitalizeWords(preset[0]);
-        $('#query').val(queryElem.value);
+        queryElem.value = preset[0];
         queryCutoffElem.value = preset[1];
         if (preset[2] == "1") expandLastQuery = 1;
         addKwd();
     }
 
-    /*
-    var topic = GetURLParameter('query');
-    var cnt = GetURLParameter('cnt');
-    $('#query').val(topic);
-    addKwd(topic);
-    */
-
-    /*
     // queryfield
     $("#query").bind("focus", function() {
         $(this).data("previous", $(this).val());
@@ -1302,9 +1062,8 @@ $(document).ready(function() {
         else $(this).data("previous", $(this).val());
     });
     $("#query").focus();
-    */
     enableSubButton();
-    
+
     // tabs
     $(".tabs div ul li + li + li + li + li").parent().children(":last-child").find("a").trigger("click");
     $(".tabs ul.titles li[class!=\"full\"]").bind("click", function(e) {
@@ -1313,10 +1072,8 @@ $(document).ready(function() {
         $(this).parent().parent().find("div .result_section").css("display", "none");
         $("#" + $(this).find("a").attr("href").slice(1)).css("display", "block");
         return false;
-        });
+    });
     $(".tabs ul li:first-child").trigger("click");
-
-
 });
 
 var transformto = function(a, b) { // a = b
@@ -1328,10 +1085,6 @@ var transformto = function(a, b) { // a = b
         if (b.indexOf(a[i]) == -1) a.splice(i, 1);
         else i++;
     }
-    
+
 }
 
-
-
-
-            
