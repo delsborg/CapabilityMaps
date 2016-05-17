@@ -721,9 +721,12 @@ var render = function() {
         $("#linkColor").val(scheme["linkcolor"]);
     }
     if (!delta) {
-        var outer = d3.select("#infovis").append("svg:svg").attr("width", w).attr("height", h);
+ //       var zoom= d3.behavior.zoom().translate([100,50]).scale(20);
+        var outer = d3.select("#infovis").append("svg:svg").attr("width", w).attr("height", h); //l(zoom.on("zoom",zooming)).append("svg:g").attr("transform","translate(100,50)scale(2,2)");
         var rescale = function () {
             vis.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")");
+            //vis.attr("transform", "translate(100,50)" + " scale(.5)");
+
         }
         vis = outer
             .append('svg:g')
@@ -732,7 +735,8 @@ var render = function() {
             .append("svg:g")
             .on("mousedown", function () {
                 vis.call(d3.behavior.zoom().scaleExtent([1, 5]).on("zoom", rescale))
-            });
+            })
+            .attr("transform", "translate(-350,-250) scale(1.8)");  // DRE static initial zooming
         vis.append('svg:rect')
             .attr('width', w).attr('height', h).attr('fill', scheme["backgroundcolor"])
             .on("click", unhighlight)

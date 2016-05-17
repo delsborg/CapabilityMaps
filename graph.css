@@ -359,7 +359,7 @@ a:focus {
     -webkit-border-bottom-right-radius: 20px;
     width: 330px;
     height: auto;
-    padding: 30px 30px 30px 130px;
+    padding: 30px 30px 30px 30px;
     filter: alpha(opacity=85);
     opacity: .9;
 }
