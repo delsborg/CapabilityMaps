@@ -18,72 +18,48 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
         <script type="text/javascript" src="jquery.color.js"></script>
         <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.1/handlebars.min.js"></script>
         <script language="javascript" type="text/javascript" src="jsr_class.js"></script>
         <script language="javascript" type="text/javascript" src="graph_new.js"></script>
-        <!--script language="javascript" type="text/javascript" src="elastic_cap.js"></script-->
-
-
-
-    <script id="person-template" type="text/x-handlebars-template">
-        <tr>
-            <td>
-                <div class="thumbnail">
-                    {{#if thumbnail}}<img src="{{thumbnail}}">{{/if}}
-                    <div class="caption">
-                        <h5><small>
-                            {{#if dcoId}}
-                            <a class="{{#if isDcoMember}}dco-logo{{/if}}" href="{{dcoId}}" target="_blank">{{name}}</a>
-                            {{else}}
-                            <a class="{{#if isDcoMember}}dco-logo{{/if}}" href="{{uri}}" target="_blank">{{name}}</a>
-                            {{/if}}
-                        </small></h5>
-                    </div>
-                </div>
-                <div class="person-info">
-                    {{#if (showMostSpecificType mostSpecificType)}}<div><em class="small">{{mostSpecificType}}</em></div>{{/if}}
-                    {{#if email}}<div><strong>Email: </strong><a href="mailto:{{email}}">{{email}}</a></div>{{/if}}
-                    {{#if orcid}}<div><strong>ORCID ID:</strong> <a href="{{orcidURL orcid}}" target="_blank">{{orcid}}</a></div>{{/if}}
-
-
-                    {{#if organization}}
-                    <div><strong>Organizations:</strong> {{#expand organization}}<a href="{{uri}}" target="_blank">{{name}}</a>{{/expand}}</div>
-                    {{/if}}
-
-                    {{#if affiliations}}
-                    <div><strong>Affiliations:</strong></div>
-                    {{#list affiliations}}{{position}} - <a href="{{org.uri}}">{{org.name}}</a>{{/list}}
-                    {{/if}}
-
-                    {{#if researchArea}}
-                    <div><strong>Research Areas:</strong> {{#expand researchArea}}<a href="{{uri}}" target="_blank">{{name}}</a>{{/expand}}</div>
-                    {{/if}}
-
-                    {{#if homeCountry}}
-                    <div><strong>International Activities:</strong> {{homeCountry.name}}</div>
-                    {{/if}}
-
-                </div>
-            </td>
-        </tr>
-    </script>
-
-    <script type="text/javascript">
-    var source = $("#person-template").html();
-    var template = Handlebars.compile(source);
-    </script>
 
         <!-- following script is for side panels -->
         <script type="text/javascript">
             $(document).ready(function(){
                 $(".trigger").click(function(){
                     $(".panel").toggle("fast");
-                    $(this).toggleClass("active");
+                   $(this).toggleClass("active");
+
+                    $(".panel2").hide("fast");
+                    $(".trigger2").removeClass("active");
+                    $(".panel3").hide("fast");
+                    $(".trigger3").removeClass("active");
+
                     return false;
                 });
+
+                $(".trigger2").click(function(){
+                    $(".panel2").toggle("fast");
+                    $(this).toggleClass("active");
+
+                    $(".panel").hide("fast");
+                    $(".trigger").removeClass("active");
+                    $(".panel3").hide("fast");
+                    $(".trigger3").removeClass("active");
+                    return false;
+                });
+
+                $(".trigger3").click(function(){
+                    $(".panel3").toggle("fast");
+                    $(this).toggleClass("active");
+
+                    $(".panel").hide("fast");
+                    $(".trigger").removeClass("active");
+                    $(".panel2").hide("fast");
+                    $(".trigger2").removeClass("active");
+                    return false;
+                });
+
             });
         </script>
-
 
         <style>
             .button {
@@ -120,31 +96,62 @@
 
 
     <!-- side panel div coe -->
-    <div id="leftpanelcontainer" >
-        <div class="panel" id="HelpPanel" style="color:black">
-            <h3>Help</h3>
-            Find an expert using this network map.
-            To add a new research term to the map:
-                <ol>
-            <li>Type it in via the search bar.</li>
-            <li>Add a potential term in the terms panel. Potential terms are terms that are in the portfolio of at least one of the experts already in the map.
-            The map can be used to prune or expand lists of experts.</li>
-        </ol>
-            The Info panel will display the experts, the departments associated with the experts, and the chosen search term(s) of their expertise.<BR>
-            The Data panel can be used to export the map into a json or csv file.
-            <h3>Legend</h3>
-            <img src="key.png" alt="Key">
-
+    <div class="leftpanelcontainer1" >
+        <div class="panel" id="StatusPanel" style="color:black">
+            <div class="leftpanelcontent">
+                <div id="statusmessage">
+            <h3Status</h3>
+            No query has been run to populate the expert map yet. Please type in a search term to get started.
+                </div>
+            </div>
             <div style="clear:both;"></div>
             <div class="columns"> </div>
             <div style="clear:both;"></div>
 
         </div>
-        <a class="trigger" href="#HelpPanel">Help</a>
-
     </div>
+    <a class="trigger" href="#StatusPanel">Status</a>
+
+
     <!-- end side panel div code -->
 
+    <div class="leftpanelcontainer1" >
+        <div class="panel2" id="HelpPanel" style="color:black">
+            <div class="leftpanelcontent">
+                <h3>Help</h3>
+                Find an expert using this network map.
+                To add a new research term to the map:
+                <ol>
+                    <li>Type it in via the search bar.</li>
+                    <li>Add a potential term in the terms panel. Potential terms are terms that are in the portfolio of at least one of the experts already in the map.
+                        The map can be used to prune or expand lists of experts.</li>
+                </ol>
+                The Info panel will display the experts, the departments associated with the experts, and the chosen search term(s) of their expertise.<BR>
+                The Data panel can be used to export the map into a json or csv file.
+            </div>
+            <div style="clear:both;"></div>
+            <div class="columns"> </div>
+            <div style="clear:both;"></div>
+
+        </div>
+    </div>
+    <a class="trigger2" href="#HelpPanel">Help</a>
+
+    <!-- side panel div coe -->
+    <div class="leftpanelcontainer1" >
+        <div class="panel3" id="LegendPanel" style="color:black">
+            <div class="leftpanelcontent">
+            <h3>Legend</h3>
+            <img src="key.png" alt="Key">
+            </div>
+            <div style="clear:both;"></div>
+            <div class="columns"> </div>
+            <div style="clear:both;"></div>
+
+        </div>
+    </div>
+    <a class="trigger3" href="#LegendPanel">Legend</a>
+    <!-- end side panel div code -->
 
 
     <div class="wrapper">

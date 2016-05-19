@@ -337,12 +337,19 @@ footer p.copyright {
 }
 
 /****************** dre 4/23/13 added to support side panel *********************/
-#leftpanelcontainer {
+
+.leftpanelcontent {
+    margin-left: 120px;
+}
+
+.leftpanelcontainer1 {
     position: absolute;
     top: 400px;
     left: 0;
-    z-index: 100;
+    z-index: 2;
 }
+
+/**** Left Panel 1 ***/
 
 a:focus {
     outline: none;
@@ -357,9 +364,9 @@ a:focus {
     -webkit-border-top-right-radius: 20px;
     -moz-border-radius-bottomright: 20px;
     -webkit-border-bottom-right-radius: 20px;
-    width: 330px;
+    width: 380px;
     height: auto;
-    padding: 30px 30px 30px 30px;
+    padding: 10px 10px 10px 30px;
     filter: alpha(opacity=85);
     opacity: .9;
 }
@@ -387,15 +394,15 @@ a:focus {
 }
 
 a.trigger{
+    position: fixed;
     text-decoration: none;
-    top: 80px; left: 0;
+    top: 400px;
+    left: 0;
     font-size: 16px;
     letter-spacing:-1px;
     font-family: verdana, helvetica, arial, sans-serif;
     color:#fff;
-    padding: 20px 40px 20px 15px;
-    font-weight: 700;
-    background:#333333 url(plus.png) 85% 55% no-repeat;
+    font-weight: 600;
     border:1px solid #444444;
     -moz-border-radius-topright: 20px;
     -webkit-border-top-right-radius: 20px;
@@ -404,18 +411,28 @@ a.trigger{
     -moz-border-radius-bottomleft: 0px;
     -webkit-border-bottom-left-radius: 0px;
     display: block;
+    background-color: #333333;
+    background-repeat: no-repeat;
+    background-position: 90% 55%;
+    z-index:4;
+    padding-top: 10px;
+    padding-right: 50px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    background:#333333 url(plus.png) 85% 55% no-repeat;
 }
 
 a.trigger:hover{
+    position: fixed;
     text-decoration: none;
-    top: 80px; left: 0;
+    top: 400px;
+    left: 0;
     font-size: 16px;
     letter-spacing:-1px;
     font-family: verdana, helvetica, arial, sans-serif;
     color:#fff;
-    padding: 20px 40px 20px 20px;
-    font-weight: 700;
-    background:#222222 url(plus.png) 85% 55% no-repeat;
+    padding: 10px 50px 10px 20px;
+    font-weight: 600;
     border:1px solid #444444;
     -moz-border-radius-topright: 20px;
     -webkit-border-top-right-radius: 20px;
@@ -424,8 +441,240 @@ a.trigger:hover{
     -moz-border-radius-bottomleft: 0px;
     -webkit-border-bottom-left-radius: 0px;
     display: block;
+    background-color: #222222;
+    background:#222222 url(plus.png) 85% 55% no-repeat;
+    background-repeat: no-repeat;
+    background-position: 90% 55%;
 }
 
 a.active.trigger {
     background:#222222 url(minus.png) 85% 55% no-repeat;
+    background-position: 90% 55%;
+}
+
+/**** Left Panel 2 ***/
+
+a:focus {
+    outline: none;
+}
+
+.panel2 {
+    position: relative;
+    display: none;
+    background: #85b0fe;
+    border:1px solid #111111;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    width: 380px;
+    height: auto;
+    padding: 10px 10px 10px 30px;
+    filter: alpha(opacity=85);
+    opacity: .9;
+}
+
+.panel2 p{
+    margin: 0 0 15px 0;
+    padding: 0;
+    color: #cccccc;
+}
+
+.panel2 a, .panel2 a:visited{
+    margin: 0;
+    padding: 0;
+    color: #9FC54E;
+    text-decoration: none;
+    border-bottom: 1px solid #9FC54E;
+}
+
+.panel2 a:hover, .panel2 a:visited:hover{
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px solid #ffffff;
+}
+
+a.trigger2{
+    position: fixed;
+    text-decoration: none;
+    top: 460px;
+    left: 0;
+    font-size: 16px;
+    letter-spacing:-1px;
+    font-family: verdana, helvetica, arial, sans-serif;
+    color:#fff;
+    font-weight: 600;
+    border:1px solid #444444;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    display: block;
+    background-color: #333333;
+    background-repeat: no-repeat;
+    background-position: 90% 55%;
+    z-index:4;
+    padding-top: 10px;
+    padding-right: 50px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    background:#333333 url(plus.png) 85% 55% no-repeat;
+}
+
+a.trigger2:hover{
+    position: fixed;
+    text-decoration: none;
+    top: 460px;
+    left: 0;
+    font-size: 16px;
+    letter-spacing:-1px;
+    font-family: verdana, helvetica, arial, sans-serif;
+    color:#fff;
+    padding: 10px 50px 10px 20px;
+    font-weight: 600;
+    border:1px solid #444444;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    display: block;
+    background-color: #222222;
+    background:#222222 url(plus.png) 85% 55% no-repeat;
+    background-repeat: no-repeat;
+    background-position: 90% 55%;
+}
+
+a.active.trigger2 {
+    background:#222222 url(minus.png) 85% 55% no-repeat;
+    background-position: 90% 55%;
+}
+
+/**** Left Panel 3 ***/
+
+a:focus {
+    outline: none;
+}
+
+.panel3 {
+    position: relative;
+    display: none;
+    background: #85b0fe;
+    border:1px solid #111111;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    width: 380px;
+    height: auto;
+    padding: 10px 10px 10px 30px;
+    filter: alpha(opacity=85);
+    opacity: .9;
+}
+
+.panel3 p{
+    margin: 0 0 15px 0;
+    padding: 0;
+    color: #cccccc;
+}
+
+.panel3 a, .panel3 a:visited{
+    margin: 0;
+    padding: 0;
+    color: #9FC54E;
+    text-decoration: none;
+    border-bottom: 1px solid #9FC54E;
+}
+
+.panel3 a:hover, .panel3 a:visited:hover{
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px solid #ffffff;
+}
+
+a.trigger3{
+    position: fixed;
+    text-decoration: none;
+    top: 520px;
+    left: 0;
+    font-size: 16px;
+    letter-spacing:-1px;
+    font-family: verdana, helvetica, arial, sans-serif;
+    color:#fff;
+    font-weight: 600;
+    border:1px solid #444444;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    display: block;
+    background-color: #333333;
+    background-repeat: no-repeat;
+    background-position: 90% 55%;
+    z-index:4;
+    padding-top: 10px;
+    padding-right: 50px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    background:#333333 url(plus.png) 85% 55% no-repeat;
+}
+
+a.trigger3:hover{
+    position: fixed;
+    text-decoration: none;
+    top: 520px;
+    left: 0;
+    font-size: 16px;
+    letter-spacing:-1px;
+    font-family: verdana, helvetica, arial, sans-serif;
+    color:#fff;
+    padding: 10px 50px 10px 20px;
+    font-weight: 600;
+    border:1px solid #444444;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    display: block;
+    background-color: #222222;
+    background:#222222 url(plus.png) 85% 55% no-repeat;
+    background-repeat: no-repeat;
+    background-position: 90% 55%;
+}
+
+a.active.trigger3 {
+    background:#222222 url(minus.png) 85% 55% no-repeat;
+    background-position: 90% 55%;
+}
+
+/*** Query result status info ***/
+#statuscontainer {
+    position: absolute;
+    top: 200px;
+    left: 0;
+    z-index: 100;
+    width: 150px;
+    height: auto;
+    padding: 30px 30px 30px 30px;
+    filter: alpha(opacity=85);
+    opacity: .9;
+    background: gray;
+    border:1px solid #111111;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+
+
 }

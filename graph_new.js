@@ -665,10 +665,15 @@ var addKwd = function(kwd) {
 var ipretResults = function(results,query) {
     console.log(query);
     console.log(results);
+    var statmsg;
     var resultlist = results.hits["hits"];
-    if (!resultlist.length || resultlist[0]["_id"] === undefined) enableSubButton();
+    var term = $('#query').val();
+    if (!resultlist.length || resultlist[0]["_id"] === undefined) {
+        enableSubButton();
+        statmsg = "No results for found for: " + term + ". Please try a different search.";
+    }
     else {
-        var term = $('#query').val();
+        statmsg = results.hits.total + " results found for: " + term;
         if (!g.hasCapability(term)) {
             var c = new Capability(term, queryCutoffElem.value, resultlist.length);
             var people = [];
@@ -681,6 +686,18 @@ var ipretResults = function(results,query) {
             g.addCapability(c, people, resultlist.length);
         }
     }
+    $('#statusmessage').text(statmsg);
+    $(".panel").hide("fast");
+    $(".trigger").removeClass("active");
+    $(".panel").toggle("fast");
+    $(".trigger").toggleClass("active");
+    $(".panel3").hide("fast");
+    $(".trigger3").removeClass("active");
+    $(".panel2").hide("fast");
+    $(".trigger2").removeClass("active");
+
+
+
     if (expandLastQuery && resultlist[0]["clusters"]) {
         expandLastQuery = 0;
         resultlist[0]["clusters"].forEach(function(term) {
