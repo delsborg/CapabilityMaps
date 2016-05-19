@@ -756,7 +756,7 @@ var render = function() {
             .attr("transform", "translate(-350,-250) scale(1.8)");  // DRE static initial zooming
         vis.append('svg:rect')
             .attr('width', w).attr('height', h).attr('fill', scheme["backgroundcolor"])
-            .on("click", unhighlight)
+            .on("click", function() { unhighlight; $('#inner-details').text("This panel displays information about individual search terms and groups. Click on a group to display its information.")})
             .on("touchstart", unhighlight);
 
         edge_layer = vis.append("svg:g");
