@@ -1124,6 +1124,7 @@ var reset = function() {
 var unhide = function() {
     hidden = false;
     $("#resetButton").removeAttr("disabled");
+    /*
     if ($(window).width() > 1230) {
         $("#container").css( "0px 0px 20px -6px #000000");
         $("#container").animate({"height" : "600px", "width" : "1200px", "margin-left" : "-130px"}, 500);
@@ -1132,6 +1133,16 @@ var unhide = function() {
         $("#container").animate({"height" : "600px"});
         $("#center-container").css("width", "640px");
     }
+    */
+    if ($(window).width() > 1230) {
+        $("#container").css( "0px 0px 20px -6px #000000");
+        $("#container").animate({"height" : "600px", "width" : "1200px"}, 500);
+        $("#center-container").css("width", "900px");
+    } else {
+        $("#center-container").animate({"height" : "600px"});
+        $("#center-container").css("width", "640px");
+    }
+
     $("#helptext").fadeOut();
     $("#center-container").fadeIn();
 }

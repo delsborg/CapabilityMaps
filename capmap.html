@@ -21,9 +21,19 @@
         <script language="javascript" type="text/javascript" src="jsr_class.js"></script>
         <script language="javascript" type="text/javascript" src="graph_new.js"></script>
 
+
+
+
         <!-- following script is for side panels -->
         <script type="text/javascript">
+
+            var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                    navigator.userAgent && !navigator.userAgent.match('CriOS');
+
             $(document).ready(function(){
+
+
+
                 $(".trigger").click(function(){
                     $(".panel").toggle("fast");
                    $(this).toggleClass("active");
@@ -57,6 +67,20 @@
                     $(".trigger2").removeClass("active");
                     return false;
                 });
+
+                // Display warning if browser is Safari
+                if (!isSafari) {
+                    var statmsg = "It looks like you are using Safari. This web page is optimized for Chrome, Firefox, or IE 11. Please use one of those browsers for an optimal experience"
+                    $('#statusmessage').text(statmsg);
+                    $(".panel").hide("fast");
+                    $(".trigger").removeClass("active");
+                    $(".panel").toggle("fast");
+                    $(".trigger").toggleClass("active");
+                    $(".panel3").hide("fast");
+                    $(".trigger3").removeClass("active");
+                    $(".panel2").hide("fast");
+                    $(".trigger2").removeClass("active");
+                }
 
             });
         </script>
@@ -154,13 +178,14 @@
     <!-- end side panel div code -->
 
 
-    <div class="wrapper">
-            <div id="wrapper-content" role="main">        
-                <div class="main" id="main-content" role="main">
-                    <div class="col-8">
+    <!-- div class="wrapper"-->
+            <!--div id="wrapper-content" role="main"-->
+                <!--div class="main" id="main-content" role="main"-->
+                    <!--div class="col-8"-->
                         <!--[if lte IE 8]>
                                 <p class="ie-alert">This site uses HTML elements that are not recognized by Internet Explorer 8 and below. As a result, the site will not be rendered appropriately. To correct this, please upgrade to Internet Explorer 9, or use another browser.</p>
                         <[endif]-->
+
                         <div id="toptxt">
                             <div id="headtxt">
                                 <div id="wname" style="display:inline-block; margin-left:-10px; padding-right:20px"><h2 style="float:left">CU Experts Map</h2></div>
@@ -286,15 +311,14 @@ The FIS Team at CU Boulder">Give us feedback</a>
                             <form id="download" method="post" style="display:none">
                                 <textarea name="content" id="exportContent"></textarea>
                             </form>
-                        </div>
-                    </div>
-                </div>
+                        <!--/div-->
+                    <!--/div-->
+                <!--/div-->
         
-            </div>
+            <!--/div--> <!-- #wrapper-content -->
         
-        </div> <!-- #wrapper-content -->
         <hr class="g-clear-floats" />
-    </div>
+
 
     </body>
 </html>
