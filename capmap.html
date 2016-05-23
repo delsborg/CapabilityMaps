@@ -185,27 +185,25 @@
                         <!--[if lte IE 8]>
                                 <p class="ie-alert">This site uses HTML elements that are not recognized by Internet Explorer 8 and below. As a result, the site will not be rendered appropriately. To correct this, please upgrade to Internet Explorer 9, or use another browser.</p>
                         <[endif]-->
-
+<div id="headarea">
                         <div id="toptxt">
-                            <div id="headtxt">
-                                <div id="wname" style="display:inline-block; margin-left:-10px; padding-right:20px"><h2 style="float:left">CU Experts Map</h2></div>
+                                <div id="appname">CU Experts Map</div>
                                 <div id="beta" ><h3> <div id="betabutton" style="background-color: red">beta</div> <div id="betatext">Improvements coming soon</div> </h3></div>
-                            </div>
 
-                        </div>
-                        <div id="queryform" style="display:inline-block">
+                        <div id="queryform">
                                <input name="query" id="query" list="rtopiclist" size="34" accesskey="q" type="text" onkeydown="queryKeyDown(event);">
                                <datalist id="rtopiclist">
                                     <select style="display:none;"></select>
                                </datalist>
                                <!-- hide cutoff for now -->
                                <label style="visibility: hidden" id="cutofflabel" for="queryCutoff">Cutoff:</label>
-                               <input style="visibility: hidden" id="queryCutoff" name="queryCutoff" type="text" title="Cutoff" size="4" value="10000" >
+                               <input style="visibility: hidden" id="queryCutoff" name="queryCutoff" type="text" title="Cutoff"  value="10000" >
                                <input type="submit" value="Search" id="add" type="button" onclick="addKwd();">
                                <input value="Reset" id="resetButton" type="submit" onclick="reset()" disabled>
 
                         </div> <!-- id="queryform" -->
-                        <div = "instrtxt">
+                        </div> <!--queryform -->
+                        <div id="instrtxt">
                         <BR> Build a map of experts by typing in a term that might represent a faculty members research expertise.
                         <a style="color: blue; display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" onclick="showhideadvanced(this)">Show advanced</a>
                         <a style="color: blue; margin-right: 50px; display:inline-block; float:right; line-height:32px; height:32px; cursor:pointer" HREF="mailto:vivo@colorado.edu?subject=CU ExpertConnect Feedback&body=Dear User,%0D%0A  While the Expert Map is in beta, we value feedback from your experience.%0D%0A
@@ -241,6 +239,7 @@ The FIS Team at CU Boulder">Give us feedback</a>
                                 <input type="submit" onclick="restoreDefaults()" value="Default">
                             </p>
                         </div>
+    </div>
                         <!-- Tier bar customisation -->
 <hr>
                         <div id="container">
