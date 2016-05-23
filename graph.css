@@ -34,7 +34,7 @@ body {
 #betabutton {}
 #betatext {}
 #queryform {
-    width: 40%;
+    width: 60%;
     margin: auto;
     /* margin-left: auto; */
     /* margin-right: auto; */
@@ -44,7 +44,9 @@ body {
 }
 #query {}
 #rtopiclist {}
-#add {}
+#add {
+    margin-left: -20px;
+}
 #resetButton {}
 #instrtxt {}
 
@@ -411,7 +413,7 @@ footer p.copyright {
 
 .leftpanelcontainer1 {
     position: absolute;
-    top: 400px;
+    top: 520px;
     left: 0;
     z-index: 2;
 }
@@ -463,7 +465,7 @@ a:focus {
 a.trigger{
     position: fixed;
     text-decoration: none;
-    top: 400px;
+    top: 520px;
     left: 0;
     font-size: 16px;
     letter-spacing:-1px;
@@ -492,7 +494,7 @@ a.trigger{
 a.trigger:hover{
     position: fixed;
     text-decoration: none;
-    top: 400px;
+    top: 520px;
     left: 0;
     font-size: 16px;
     letter-spacing:-1px;
@@ -566,7 +568,7 @@ a:focus {
 a.trigger2{
     position: fixed;
     text-decoration: none;
-    top: 460px;
+    top: 580px;
     left: 0;
     font-size: 16px;
     letter-spacing:-1px;
@@ -595,7 +597,7 @@ a.trigger2{
 a.trigger2:hover{
     position: fixed;
     text-decoration: none;
-    top: 460px;
+    top: 580px;
     left: 0;
     font-size: 16px;
     letter-spacing:-1px;
@@ -669,7 +671,7 @@ a:focus {
 a.trigger3{
     position: fixed;
     text-decoration: none;
-    top: 520px;
+    top: 640px;
     left: 0;
     font-size: 16px;
     letter-spacing:-1px;
@@ -698,7 +700,7 @@ a.trigger3{
 a.trigger3:hover{
     position: fixed;
     text-decoration: none;
-    top: 520px;
+    top: 640px;
     left: 0;
     font-size: 16px;
     letter-spacing:-1px;
