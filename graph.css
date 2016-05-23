@@ -15,6 +15,7 @@ body {
 	max-width: 1200px;
 }
 
+#main-map {}
 #headarea {}
 #toptxt {}
 #appname {
@@ -99,6 +100,7 @@ body {
 /*    width: 900px; */
     background-color:#FFFFFF;
     color:#ccc;
+    float: right;
 }
 
 .result_section {
@@ -366,6 +368,39 @@ footer {
 footer p.copyright {
     margin-left:0px;
     padding-left:0px;
+}
+
+/** styles for right container **/
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0px 0px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+.button1 {
+    background-color: darkseagreen;
+    color: black;
+    border: 1px solid #4CAF50;
+    width: 100%;
+    margin: -1px;
+}
+.button2 {
+    background-color: #85b0fe;
+}
+
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
 }
 
 /****************** dre 4/23/13 added to support side panel *********************/

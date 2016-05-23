@@ -438,7 +438,7 @@ DetailsPanel.prototype.showDetails = function(mode, id) {
                 .css("cursor", "pointer")
                 .prepend($("<span/>").addClass("orange-square"))
             )
-            .append($("<button>Remove capability</button>")
+            .append($("<button>Remove term</button>")
                 .bind("click", function() {
                     g.removeCapability(id);
                     that.clearDetails();
@@ -670,7 +670,7 @@ var ipretResults = function(results,query) {
     var term = $('#query').val();
     if (!resultlist.length || resultlist[0]["_id"] === undefined) {
         enableSubButton();
-        statmsg = "No results for found for: " + term + ". Please try a different search.";
+        statmsg = "No results found for: " + term + ". Please try a different search.";
     }
     else {
         statmsg = results.hits.total + " results found for: " + term;
@@ -959,7 +959,7 @@ var render = function() {
     $.each(g.getCapabilities(), function (i, c) {
         $("#log_printout")
             .append($("<li/>")
-                .append($('<button class="button button1">' + "<a> " + decodeURI(c.term) + "</a></button>")
+                .append($('<button class="button button1 button2">' + "<a> " + decodeURI(c.term) + "</a></button>")
                     .bind("click", function () {
                         g.removeCapability(c.term);
                         render();
