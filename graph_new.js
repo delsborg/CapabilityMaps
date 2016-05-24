@@ -676,7 +676,7 @@ var ipretResults = function(results,query) {
         statmsg = bstatmsg + "No results found for: " + term + ". Please try a different search.";
     }
     else {
-        statmsg = bstatmsg + results.hits.total + " results found for: " + term;
+        statmsg = bstatmsg + "Results added for: " + term;
         if (!g.hasCapability(term)) {
             var c = new Capability(term, queryCutoffElem.value, resultlist.length);
             var people = [];
