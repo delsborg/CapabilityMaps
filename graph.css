@@ -29,7 +29,7 @@ body {
     float: left;
 }
 #beta {
-    float: right;
+    float: left;
 }
 #betabutton {}
 #betatext {}
@@ -404,6 +404,10 @@ footer p.copyright {
     background-color: #4CAF50;
     color: white;
 }
+
+.button a { color: black}
+
+.button1:hover a { color: black}
 
 /****************** dre 4/23/13 added to support side panel *********************/
 

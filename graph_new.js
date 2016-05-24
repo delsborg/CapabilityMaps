@@ -665,15 +665,17 @@ var addKwd = function(kwd) {
 var ipretResults = function(results,query) {
     console.log(query);
     console.log(results);
-    var statmsg;
+    if (!isSafari) {
+        var bstatmsg = "It looks like you are using Safari. This web page is optimized for Chrome, Firefox, or IE 11. Please use one of those browsers for an optimal experience.<br><br>"
+    }
     var resultlist = results.hits["hits"];
     var term = $('#query').val();
     if (!resultlist.length || resultlist[0]["_id"] === undefined) {
         enableSubButton();
-        statmsg = "No results found for: " + term + ". Please try a different search.";
+        statmsg = bstatmsg + "No results found for: " + term + ". Please try a different search.";
     }
     else {
-        statmsg = results.hits.total + " results found for: " + term;
+        statmsg = bstatmsg + results.hits.total + " results found for: " + term;
         if (!g.hasCapability(term)) {
             var c = new Capability(term, queryCutoffElem.value, resultlist.length);
             var people = [];
@@ -686,7 +688,7 @@ var ipretResults = function(results,query) {
             g.addCapability(c, people, resultlist.length);
         }
     }
-    $('#statusmessage').text(statmsg);
+    $('#statusmessage').html(statmsg);
     $(".panel").hide("fast");
     $(".trigger").removeClass("active");
     $(".panel").toggle("fast");

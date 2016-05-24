@@ -29,7 +29,8 @@
 
             var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                     navigator.userAgent && !navigator.userAgent.match('CriOS');
-
+            var bstatmsg ="";
+            var statmsg = "";
             $(document).ready(function(){
 
 
@@ -70,8 +71,8 @@
 
                 // Display warning if browser is Safari
                 if (!isSafari) {
-                    var statmsg = "It looks like you are using Safari. This web page is optimized for Chrome, Firefox, or IE 11. Please use one of those browsers for an optimal experience"
-                    $('#statusmessage').text(statmsg);
+                    var bstatmsg = "It looks like you are using Safari. This web page is optimized for Chrome, Firefox, or IE 11. Please use one of those browsers for an optimal experience"
+                    $('#statusmessage').text(bstatmsg);
                     $(".panel").hide("fast");
                     $(".trigger").removeClass("active");
                     $(".panel").toggle("fast");
@@ -164,9 +165,10 @@
                         <[endif]-->
     <div id="main-map">
          <div id="headarea">
-                        <div id="toptxt">
+                        <div-- id="toptxt">
+                                <div id="beta"><img style="width: 70px;margin-top: 8px" src="beta.png"></div>
                                 <div id="appname">CU Experts Map</div>
-                                <div id="beta" ><h3> <div id="betabutton" style="background-color: red">beta</div> <div id="betatext">Improvements coming soon</div> </h3></div>
+                                <!--div id="beta" ><h3> <div id="betabutton" style="background-color: red">beta</div> <div id="betatext">Improvements coming soon</div> </h3></div-->
 
                         <div id="queryform">
                                <input name="query" id="query" list="rtopiclist" size="34" accesskey="q" type="text" onkeydown="queryKeyDown(event);">
@@ -277,9 +279,7 @@ The FIS Team at CU Boulder">Give us feedback</a>
                                                 <!--button onclick="download(g.toDOT(), 'gv')">DOT</button-->
                                             </p>
                                             <textarea id="graphDetails" style="width:99%; height:450px; border:1px solid #EEE; padding:0px;"></textarea>
-                                            <p style="position:absolute; bottom:10px">
-                                                <img src="key.png" alt="Key">
-                                            </p>
+
                                         </div>
                                     </div>
                                 </div>            
