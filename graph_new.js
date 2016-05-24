@@ -665,8 +665,9 @@ var addKwd = function(kwd) {
 var ipretResults = function(results,query) {
     console.log(query);
     console.log(results);
+    var bstatmsg = "";
     if (isSafari) {
-        var bstatmsg = "It looks like you are using Safari. This web page is optimized for Chrome, Firefox, or IE 11. Please use one of those browsers for an optimal experience.<br><br>"
+         bstatmsg = "It looks like you are using Safari. This web page is optimized for Chrome, Firefox, or IE 11. Please use one of those browsers for an optimal experience.<br><br>"
     }
     var resultlist = results.hits["hits"];
     var term = $('#query').val();
