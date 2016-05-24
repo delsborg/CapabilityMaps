@@ -70,7 +70,7 @@
                 });
 
                 // Display warning if browser is Safari
-                if (!isSafari) {
+                if (isSafari) {
                     var bstatmsg = "It looks like you are using Safari. This web page is optimized for Chrome, Firefox, or IE 11. Please use one of those browsers for an optimal experience"
                     $('#statusmessage').text(bstatmsg);
                     $(".panel").hide("fast");
