@@ -423,6 +423,7 @@ DetailsPanel.prototype.clearDetails = function() {
     $(this.panel).empty();
 }
 DetailsPanel.prototype.showDetails = function(mode, id) {
+    hidestatus();
     showPanel("logg");
     var that = this;
     var departments = {};
@@ -965,6 +966,7 @@ var render = function() {
                 .append($('<button class="button button1 button2">' + "<a> " + decodeURI(c.term) + "</a></button>")
                     .bind("click", function () {
                         g.removeCapability(c.term);
+                        displaystatus("Removed term: " + c.term + " from map")
                         render();
                     })
                     .css("cursor", "pointer")
@@ -1191,6 +1193,29 @@ var queryKeyDown = function(e) {
         e.cancel = true;
         return false;
     }
+    return true;
+}
+
+function hidestatus(){
+    $(".panel").hide("fast");
+    $(".trigger").removeClass("active");
+    return true;
+}
+function expandstatus(){
+    $(".panel").hide("fast");
+    $(".trigger").removeClass("active");
+    $(".panel").toggle("fast");
+    $(".trigger").toggleClass("active");
+    $(".panel3").hide("fast");
+    $(".trigger3").removeClass("active");
+    $(".panel2").hide("fast");
+    $(".trigger2").removeClass("active")
+    return true;
+}
+function displaystatus(msg){
+    $('#statusmessage').text(msg);
+    hidestatus();
+    expandstatus();
     return true;
 }
 

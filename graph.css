@@ -420,7 +420,7 @@ footer p.copyright {
 .leftpanel {
     /* top: 235px; */
     height: 360px;
-    width: 450px;
+/*    width: 450px; */
     z-index: 2;
     position: fixed;
     left:0;
