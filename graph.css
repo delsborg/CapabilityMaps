@@ -423,6 +423,7 @@ footer p.copyright {
     width: 450px;
     z-index: 2;
     position: fixed;
+    left:0;
 }
 
 .leftpanelcontent {
