@@ -417,6 +417,13 @@ footer p.copyright {
 .button1:hover a { color: black}
 
 /****************** dre 4/23/13 added to support side panel *********************/
+.leftpanel {
+    top: 235px;
+    height: 360px;
+    width: 450px;
+    z-index: 2;
+    position: relative;
+}
 
 .leftpanelcontent {
     margin-left: 120px;
@@ -424,7 +431,7 @@ footer p.copyright {
 
 .leftpanelcontainer1 {
     position: absolute;
-    top: 520px;
+    bottom: 10px;
     left: 0;
     z-index: 2;
     border: 1px solid #ddd;
@@ -437,8 +444,9 @@ a:focus {
 }
 
 .panel {
-    position: fixed;
+     position: absolute;
     display: none;
+    bottom: 0px;
     background: #85b0fe;
     border:1px solid #ddd;
     -moz-border-radius-topright: 20px;
@@ -533,8 +541,9 @@ a:focus {
 }
 
 .panel2 {
-    position: fixed;
+    position: absolute;
     display: none;
+    bottom: 0px;
     background: #85b0fe;
     border:1px solid #ddd;
     -moz-border-radius-topright: 20px;
@@ -629,8 +638,9 @@ a:focus {
 }
 
 .panel3 {
-    position: fixed;
+    position: absolute;
     display: none;
+    bottom: 0px;
     background: #85b0fe;
     border:1px solid #ddd;
     -moz-border-radius-topright: 20px;
@@ -735,6 +745,10 @@ a.active.trigger3 {
     -webkit-border-top-right-radius: 20px;
     -moz-border-radius-bottomright: 20px;
     -webkit-border-bottom-right-radius: 20px;
+}
 
-
+/*   Fix VIVO overrides */
+ol, ul {
+    list-style: initial;
+    font-weight: normal;
 }
