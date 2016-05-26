@@ -492,6 +492,7 @@ DetailsPanel.prototype.showDetails = function(mode, id) {
        });
 
   /*    Attempting to create the checkboxes with D3 -- problem is that the checkbox input is appended to the label. I need it prepended
+        Revisit this method later now that we're using buttons, can use this for global color changes
         d3.select('#other_terms').selectAll("li").remove();
         var allcaps=g.getAllCapabilities(g.groups[id]);
         var otherlist=d3.select('#other_terms').selectAll("li").data(allcaps);
@@ -691,16 +692,7 @@ var ipretResults = function(results,query) {
         }
     }
     $('#statusmessage').html(statmsg);
-    $(".panel").hide("fast");
-    $(".trigger").removeClass("active");
-    $(".panel").toggle("fast");
-    $(".trigger").toggleClass("active");
-    $(".panel3").hide("fast");
-    $(".trigger3").removeClass("active");
-    $(".panel2").hide("fast");
-    $(".trigger2").removeClass("active");
-
-
+    displaystatus(stat statmsg);
 
     if (expandLastQuery && resultlist[0]["clusters"]) {
         expandLastQuery = 0;

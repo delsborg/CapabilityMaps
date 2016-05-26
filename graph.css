@@ -419,7 +419,7 @@ footer p.copyright {
 /****************** dre 4/23/13 added to support side panel *********************/
 .leftpanel {
     /* top: 235px; */
-    height: 360px;
+     height: 360px;
 /*    width: 450px; */
     z-index: 2;
     position: fixed;
@@ -428,6 +428,7 @@ footer p.copyright {
 
 .leftpanelcontent {
     margin-left: 120px;
+   /* height:360px */
 }
 
 .leftpanelcontainer1 {
@@ -436,6 +437,7 @@ footer p.copyright {
     left: 0;
     z-index: 2;
     border: 1px solid #ddd;
+   /* height: 360px; */
 }
 
 /**** Left Panel 1 ***/
@@ -552,7 +554,8 @@ a:focus {
     -moz-border-radius-bottomright: 20px;
     -webkit-border-bottom-right-radius: 20px;
     width: 380px;
-    height: auto;
+    height: 360px;
+    overflow:auto;
     padding: 10px 10px 10px 30px;
     filter: alpha(opacity=85);
     opacity: .9;
@@ -648,7 +651,7 @@ a:focus {
     -webkit-border-top-right-radius: 20px;
     -moz-border-radius-bottomright: 20px;
     -webkit-border-bottom-right-radius: 20px;
-    width: 380px;
+    width: 420px;
     height: auto;
     padding: 10px 10px 10px 30px;
     filter: alpha(opacity=85);
