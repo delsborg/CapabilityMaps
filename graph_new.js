@@ -692,7 +692,7 @@ var ipretResults = function(results,query) {
         }
     }
     $('#statusmessage').html(statmsg);
-    displaystatus(stat statmsg);
+    displaystatus(statmsg);
 
     if (expandLastQuery && resultlist[0]["clusters"]) {
         expandLastQuery = 0;

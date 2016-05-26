@@ -419,7 +419,7 @@ footer p.copyright {
 /****************** dre 4/23/13 added to support side panel *********************/
 .leftpanel {
     /* top: 235px; */
-     height: 360px;
+     height: 300px;
 /*    width: 450px; */
     z-index: 2;
     position: fixed;
